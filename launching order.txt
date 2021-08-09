@@ -1,0 +1,6 @@
+SimBot
+LessonBot
+HomeSensors
+SensorManager
+Thingspeak adaptor
+main control strat

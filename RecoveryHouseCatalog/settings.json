@@ -1,0 +1,204 @@
+{
+    "project_Name": "MySmartRecHouse",
+    "broker": "broker.hivemq.com",
+    "port": 1883,
+    "devicesList": [
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/1",
+            "e": [
+                {
+                    "n": "Patient_Temperature",
+                    "u": "Celsius",
+                    "t": "",
+                    "v": 0
+                }
+            ]
+        },
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/2",
+            "e": [
+                {
+                    "n": "Patient_HeartRate",
+                    "u": "Bpm",
+                    "t": "",
+                    "v": 0
+                },
+                {
+                    "n": "Patient_OxySaturation",
+                    "u": "%",
+                    "t": "",
+                    "v": 0
+                }
+            ]
+        },
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/3",
+            "e": [
+                {
+                    "n": "Patient_Weight",
+                    "u": "Kg",
+                    "t": "",
+                    "v": 0
+                }
+            ]
+        },
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/1",
+            "e": [
+                {
+                    "n": "Temperature",
+                    "u": "Celsius",
+                    "t": "",
+                    "v": 2.36151877164681,
+                    "std": 2
+                }
+            ]
+        },
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/2",
+            "e": [
+                {
+                    "n": "LuminousIntensity",
+                    "v": 476.6341356852704,
+                    "std": 100,
+                    "u": "Lumen",
+                    "t": ""
+                }
+            ]
+        },
+        {
+            "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/3",
+            "e": [
+                {
+                    "n": "Humidity",
+                    "v": 50,
+                    "std": 10,
+                    "u": "%",
+                    "t": ""
+                }
+            ]
+        }
+    ],
+    "TSchannels_List": [
+        {
+            "channelName": "Temperature",
+            "channelID": 65231,
+            "Read_API_Key": "TERBTYFDTERYT",
+            "Write_API_Key": "QT8Z0I02SF34V6EA"
+        },
+        {
+            "channelName": "HeartRate&OxygenSatur",
+            "channelID": 792683,
+            "Read_API_Key": "FDHGEEATHTERHT",
+            "Write_API_Key": "RSTH9NTRH5RST9H6D"
+        },
+        {
+            "channelName": "Weight",
+            "channelID": 318679,
+            "Read_API_Key": "OJMPRNWIFQERHRY",
+            "Write_API_Key": "OI87DF231S564SHR"
+        },
+        {
+            "channelName": "Height",
+            "channelID": 8798416,
+            "Read_API_Key": "PUANYSMFHVXJSH",
+            "Write_API_Key": "U92SF2H5FH15E6HHE"
+        },
+        {
+            "channelName": "IOTProgramingProject",
+            "channelID": 1344442,
+            "Read_API_Key": "9VW7NUU7RKUDWEKR",
+            "Write_API_Key": "4ITG4X8S5AZ6FTYQ"
+        }
+    ],
+    "TG_Token": [
+        "1839018512:AAGKLDN9cBCSG6sDQOM1wIwBFzmzZ3XciHM",
+        "1949918855:AAFbs02XkEKuqBUlzAurm8CSEJA-YGh650A"
+    ],
+    "Topics_List": {
+        "patients1": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/1",
+        "patients2": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/2",
+        "patients3": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/3",
+        "houses1": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/1",
+        "houses2": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/2",
+        "houses3": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/house/3",
+        "tcsts1": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/timecontrolstrategy/timeshift/actuations/1",
+        "tcsts2": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/timecontrolstrategy/timeshift/actuations/2",
+        "tcslights": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/timecontrolstrategy/sensors/actuations/lights",
+        "tcsheating": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/timecontrolstrategy/sensors/actuations/heatings",
+        "tcshumidifier": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/timecontrolstrategy/sensors/actuations/humidifier",
+        "t_bot_topic": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/TGbot/commands",
+        "sim_bot_topic": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/TGbot/simulations"
+    },
+    "Intervals": [
+        [
+            "06:00:00",
+            "20:00:00"
+        ],
+        [
+            "04:00:00",
+            "21:00:00"
+        ]
+    ],
+    "tresholds_actuators": {
+        "Temperature": [
+            19,
+            21
+        ],
+        "LuminousIntensity": [
+            450,
+            550
+        ],
+        "Humidity": [
+            30,
+            50
+        ]
+    },
+    "sensors_to_sub_time_contr": [],
+    "Measurements_Patient": {
+        "Temp": 36.879733624978755,
+        "HeartR": 94.68996598523412,
+        "Weight": 65.95719134392957
+    },
+    "Measurements_House": {
+        "Temperature": 0.35280015755284166,
+        "LuminousIntensity": 505.3226063868269,
+        "Humidity": 73.89570902279439
+    },
+    "Status_Actuators": {
+        "Act1": "on",
+        "Act2": "on",
+        "Lights": "off",
+        "Heating": "off",
+        "Humidifier": ""
+    },
+    "Pins": {
+        "Doctor_PIN": "0000",
+        "Caregiver_PIN": "1234",
+        "Patient_PIN": "4321"
+    },
+    "Patient_Folder": {
+        "Name": "Alexander",
+        "Age": "29",
+        "Height": "175",
+        "Weight": "66",
+        "Diagnostic": "The patient is recovering from a surgical intervention to the pancreas"
+    },
+    "Sim_settings": {
+        "Temp_sim": "h",
+        "Weight_sim": "h",
+        "HR_sim": "h",
+        "Temp_status": "n",
+        "HR_status": "n"
+    },
+    "Alarms": {
+        "Temp": 36.879733624978755,
+        "HeartR": 94.68996598523412,
+        "Weight": 65.95719134392957
+    },
+    "Regr_Values": {
+        "Temp": 21.473301250201462,
+        "HeartR": 203.22180125105766,
+        "Weight": 61.908904861326675
+    }
+}
