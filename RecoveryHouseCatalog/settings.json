@@ -10,13 +10,13 @@
         "name" : "",
         "age" : "",
         "patientAssigned" : ""
-    }
+    },
     "baseDoctor" : {
         "name" : "",
         "age" : "",
         "patientsAssigned" : []
-    }
-    "basePatient": [
+    },
+    "basePatient": 
          {
             "name" : "",
             "age" : "",
@@ -29,8 +29,7 @@
             "bodyDevices" : [],
             "houseDevices" : [],
             "actuatorsList" : []
-        }
-    ],
+        },
     "baseSensor":{
         "topic" : "",
         "patientID" : "",
