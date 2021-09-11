@@ -4,7 +4,7 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import json, time
 import requests
 from MyMQTT import *
-from mqtt_methods.mqtt_methods import Subscribers
+import telegramMethods as tm
 
 
 
@@ -178,7 +178,7 @@ if __name__ == "__main__":
     with open("catalog_mqtt_settings.json","r") as json_in:
         setsCatalog = json.load(json_in)
 
-    S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
+    S=tm.MQTT_telegram.Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
     i=0
     while i<10:
         S.start()
