@@ -94,35 +94,58 @@ class SwitchBot:
         
         return ansSupported
 
+    def login(self, datum):
+        global logged
+
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+        uniqueID = datum_list.pop(0)
+        pw = datum_list.pop(0)
+
+        r = requests.get(catalog_address + "/telegram/get_pins")
+        pins = r.json()
+
+        #response will be dict with "patients" : list of dict, "doc" : list of dict ecc
+
+        for key in pins:
+            for idpw in pins[key]:
+                if idpw["uniqueID"] == uniqueID:
+                    if idpw["pin"] == pw:
+                        logged[key] = True
+
+
+
     def on_chat_message(self, msg):
         content_type, chat_type, chat_ID = telepot.glance(msg)
         message = msg['text']
+        global logged
         global flagID
         global flagFolder
         with open("Telegram/explanation_messages.json") as json_in:
             explanations = json.load(json_in)
         
-        r=requests.get(catalog_address+"/telegram_bot/pin_ids")
-        pins = r.json()
+        # r=requests.get(catalog_address+"/telegram_bot/pin_ids")
+        # pins = r.json()
         if flagFolder!=999:
             name_field, val_field=self.split_message(message)
 
 
         if message == "/start":
-            self.bot.sendMessage(chat_ID, text='Please insert pin')
+            self.bot.sendMessage(chat_ID, text='Welcome to the telegram bot')
+            flagFolder = 3
             
-        elif message == "/options" and flagID == 1:
-            buttons=[[InlineKeyboardButton(text=f'Med Folder', callback_data='/folder'),
-                    InlineKeyboardButton(text=f'Simulations', callback_data='/Sim')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        # elif message == "/options" and flagID == 1:
+        #     buttons=[[InlineKeyboardButton(text=f'Med Folder', callback_data='/folder'),
+        #             InlineKeyboardButton(text=f'Simulations', callback_data='/Sim')]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
 
-            self.bot.sendMessage(chat_ID, text='Select an option', reply_markup=keyboard)
+        #     self.bot.sendMessage(chat_ID, text='Select an option', reply_markup=keyboard)
 
-        elif message == "/folder" and flagID == 1:
-            buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        # elif message == "/folder" and flagID == 1:
+        #     buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
 
-            self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
+        #     self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
     
 
         elif message == "/Sim" and flagID == 1:
@@ -151,9 +174,9 @@ class SwitchBot:
             self.bot.sendMessage(chat_ID, text="More options", reply_markup=keyboard3)
             self.bot.sendMessage(chat_ID, text="More options", reply_markup=keyboard4)
 
-        elif message == pins["Doctor_PIN"]:
-            flagID = 1
-            self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
+        # elif message == pins["Doctor_PIN"]:
+        #     flagID = 1
+        #     self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
 
         elif message == "/addSomeone":
             buttons=[[InlineKeyboardButton(text=f'Patient', callback_data="/newPt"),
@@ -188,6 +211,16 @@ class SwitchBot:
         elif message == "/supported":
             self.bot.sendMessage(chat_ID, text = self.supportedFeatures())
 
+        elif name_field == '/login':
+            self.login(val_field)
+            self.bot.sendMessage(chat_ID, text = json.dumps(logged))
+
+        elif name_field == '/logout':
+            logged["Patient"] = False
+            logged["Doctor"] = False
+            logged["Caretaker"] = False
+            self.bot.sendMessage(chat_ID, text = json.dumps(logged))
+
         elif name_field == '/addPatient':
             pObj = Patient()
             pObj.buildAttributes(val_field)
@@ -216,6 +249,44 @@ class SwitchBot:
             pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateActuator", frame) #put request
+
+        elif name_field == '/patientPinRegistration':
+            pObj = Patient()
+            frame = pObj.registerAccount(val_field)
+            pObj.updateFrame(catalog_address + "/telegram/registerPatient", frame)
+
+        elif name_field == '/doctorPinRegistration':
+            dObj = Doctor()
+            frame = dObj.registerAccount(val_field)
+            dObj.updateFrame(catalog_address + "/telegram/registerDoctor", frame)
+
+        elif name_field == '/caretakerPinRegistration':
+            cObj = Caretaker()
+            frame = cObj.registerAccount(val_field)
+            cObj.updateFrame(catalog_address + "/telegram/registerCaretaker", frame)
+
+        elif name_field == '/deletePatient':
+            if logged["Doctor"]:
+                pObj = Patient()
+                pObj.deleteField(catalog_address + "/telegram/deletePatient",val_field)
+            else:
+                self.bot.sendMessage(chat_ID, text = "Access Denied")
+
+        elif name_field == '/deleteDoctor':
+            if logged["Doctor"]:
+                dObj = Doctor()
+                dObj.deleteField(catalog_address + "/telegram/deleteDoctor",val_field)
+            else:
+                self.bot.sendMessage(chat_ID, text = "Access Denied")
+
+        elif name_field == '/deleteCaretaker':
+            if logged["Doctor"]:
+                cObj = Caretaker()
+                cObj.deleteField(catalog_address + "/telegram/deleteCaretaker",val_field)
+            else:
+                self.bot.sendMessage(chat_ID, text = "Access Denied")
+
+        
 
         # elif name_field == '/folder/name':
         #     # message=val_field
@@ -293,6 +364,11 @@ if __name__ == "__main__":
     
     flagID=999
     flagFolder=999
+    logged = {
+        "Patient" : False,
+        "Doctor" : False,
+        "Caretaker" : False
+    }
     
     sb=SwitchBot(token,broker,port,topic,catalog_address)
     while True:

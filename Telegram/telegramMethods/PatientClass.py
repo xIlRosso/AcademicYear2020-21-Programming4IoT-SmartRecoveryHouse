@@ -50,6 +50,7 @@ class Patient:
 
     def addAddress(self, datum) -> dict:
         datum_list = datum.split('/')
+        datum_list.pop(0)
         self.uniqueID = datum_list.pop(0)
         address_list = datum_list.pop(0).split('_')
         address = ""
@@ -65,6 +66,7 @@ class Patient:
 
     def updateActuatorVal(self, datum) -> dict:
         datum_list = datum.split('/')
+        datum_list.pop(0)
         self.uniqueID = datum_list.pop(0)
         actName = datum_list.pop(0)
         actLow = datum_list.pop(0)
@@ -79,11 +81,28 @@ class Patient:
 
         return frame
 
+    def registerAccount(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+
+        frame = {
+            "userName" : datum_list.pop(0),
+            "pin" : datum_list.pop(0)
+        }
+
+        return frame
+
     def sendFrame(self, ipAddress, frame) -> None:
         requests.post(ipAddress, json=frame)
 
     def updateFrame(self, ipAddress, frame) -> None:
         requests.put(ipAddress, json=frame)
+
+    def deleteField(self, ipAddress, datum) -> None:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+
+        requests.delete(ipAddress+'/'+datum_list.pop(0))
 
     #maybe add put requests for updating fields
     

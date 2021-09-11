@@ -43,7 +43,29 @@ class GET_manager(object):
                 #we need to get all the sensors from all the houses, publish on house-based topics
                 
 
-
+        elif self.path[0] == 'telegram':
+            _set_path="settings.json"
+            with open(_set_path) as json_file:
+                data=json.load(json_file)
+                
+            if self.path[1] == 'get_pins':
+                
+                resp = {
+                    "Patient": [],
+                    "Doctor": [],
+                    "Caretaker": []
+                    }
+                
+                for patient in data["patientsList"]:
+                    resp["Patient"].append({"uniqueID":patient["uniqueID"], "pin":patient["pin"]})
+                    
+                for doctor in data["doctorsList"]:
+                    resp["Doctor"].append({"uniqueID":doctor["uniqueID"], "pin":doctor["pin"]})
+                
+                for caretaker in data["caretakersList"]:
+                    resp["Caretaker"].append({"uniqueID":caretaker["uniqueID"], "pin":caretaker["pin"]})
+                    
+                return json.dumps(resp)
 
 
         if self.path[0]=='sensor':
@@ -468,22 +490,95 @@ class PUT_manager():
             
         if self.path[0] == "telegram":
             if self.path[1] == "updateAddress":
-                for patient in all_data["patientsList"]:
-                    if patient["uniqueID"] == data["uniqueID"]:
-                        patient["address"] = data["address"]
-                        
-                json.dump(all_data, open(_set_path, "w"), indent = 4)
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == data["uniqueID"]:
+                            patient["address"] = data["address"]
+                            
+                    json.dump(all_data, open(_set_path, "w"), indent = 4)
                 
-            if self.path[1] == "updateActuator":
-                for patient in all_data["patientsList"]:
-                    if patient["uniqueID"] == data["uniqueID"]:
-                        actList = patient["actuatorsList"]
-                        for actuator in actList:
-                            if actuator["name"] == data["actName"]:
-                                actuator["tresholds"][0]=data["actLow"]
-                                actuator["tresholds"][1]=data["actHigh"]
-                                
-                json.dump(all_data, open(_set_path,"w"), indent = 4)
+            elif self.path[1] == "updateActuator":
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == data["uniqueID"]:
+                            actList = patient["actuatorsList"]
+                            for actuator in actList:
+                                if actuator["name"] == data["actName"]:
+                                    actuator["tresholds"][0]=data["actLow"]
+                                    actuator["tresholds"][1]=data["actHigh"]
+                                    
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                
+            elif self.path[1] == "registerPatient":
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == data["userName"]:
+                            patient["pin"] = data["pin"]
+                            
+                            
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    
+            elif self.path[1] == "registerDoctor":
+                if all_data["doctorsList"] != []:
+                    for doctor in all_data["doctorsList"]:
+                        if doctor["uniqueID"] == data["userName"]:
+                            doctor["pin"] = data["pin"]
+                            
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    
+            elif self.path[1] == "registerCaretaker":
+                if all_data["caretakersList"] != []:
+                    for caretaker in all_data["caretakersList"]:
+                        if caretaker["uniqueID"] == data["userName"]:
+                            caretaker["pin"] = data["pin"]
+                            
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
             
                 
-
+class DELETE_manager():
+    def __init__(self, path):
+        self.path=path
+        
+    def run(self):
+        _set_path = 'settings.json'
+        with open(_set_path) as json_in:
+            all_data=json.load(json_in)
+        
+        if self.path[0]=="telegram":
+            if self.path[1]=="deletePatient":
+                uniqueID = self.path[2]
+                if all_data["patientsList"] != []:
+                    i = 0
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == uniqueID:
+                            all_data["patientsList"].pop(i)
+                            
+                        i+=1
+                        
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                
+            
+            elif self.path[1]=="deleteDoctor":
+                uniqueID = self.path[2]
+                if all_data["doctorsList"] != []:
+                    i = 0
+                    for doctor in all_data["doctorsList"]:
+                        if doctor["uniqueID"] == uniqueID:
+                            all_data["doctorsList"].pop(i)
+                            
+                        i+=1
+                        
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    
+            elif self.path[1]=="deleteCaretaker":
+                uniqueID = self.path[2]
+                if all_data["caretakersList"] != []:
+                    i = 0
+                    for caretaker in all_data["caretakersList"]:
+                        if caretaker["uniqueID"] == uniqueID:
+                            all_data["caretakersList"].pop(i)
+                            
+                        i+=1
+                        
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+        

@@ -10,7 +10,7 @@ REST server main file
 
 
 import cherrypy
-from REST_classes.system_classes import GET_manager, POST_manager, PUT_manager
+from REST_classes.system_classes import GET_manager, POST_manager, PUT_manager, DELETE_manager
 
 
 class HouseRecoveryCatalog(object):
@@ -43,8 +43,9 @@ class HouseRecoveryCatalog(object):
         objPUT.run(data)
             
     
-    def DELETE(self):
-        pass
+    def DELETE(self, *path):
+        objDELETE=DELETE_manager(path)
+        objDELETE.run()
     
 
 if __name__=='__main__':

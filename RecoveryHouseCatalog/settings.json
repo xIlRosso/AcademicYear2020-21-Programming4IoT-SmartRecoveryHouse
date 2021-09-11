@@ -4,26 +4,144 @@
     "port": 1883,
     "baseTopic": "programming_for_iot/aa2021/SmartRecoveryHouse",
     "patientsList": [
+        {
+            "name": "Aelxandru",
+            "age": 22,
+            "uniqueID": "example@domain.com",
+            "pin": "pppp4444",
+            "disease": "ckd",
+            "bodySensors": [],
+            "houseSensors": [],
+            "controlledActuators": [],
+            "address": "",
+            "bodyDevices": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/body/temperature",
+                    "e": [
+                        {
+                            "n": "temperature",
+                            "u": "C",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/body/weight",
+                    "e": [
+                        {
+                            "n": "weight",
+                            "u": "kg",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/body/heartrate",
+                    "e": [
+                        {
+                            "n": "heartrate",
+                            "u": "bpm",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                }
+            ],
+            "houseDevices": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/house/temperature",
+                    "e": [
+                        {
+                            "n": "temperature",
+                            "u": "C",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/house/humidity",
+                    "e": [
+                        {
+                            "n": "humidity",
+                            "u": "%",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
+                    "patientID": "example@domain.com",
+                    "bn": "example@domain.com/house/lumen",
+                    "e": [
+                        {
+                            "n": "lumen",
+                            "u": "lm",
+                            "t": "",
+                            "v": 0
+                        }
+                    ]
+                }
+            ],
+            "actuatorsList": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/actuator/",
+                    "patientID": "example@domain.com",
+                    "unit": "s",
+                    "name": "time",
+                    "tresholds": [
+                        "06:00:00",
+                        "20:00:00"
+                    ],
+                    "state": ""
+                }
+            ]
+        }
     ],
-    "doctorsList": [],
+    "doctorsList": [
+        {
+            "name": "Alex",
+            "age": 29,
+            "patientsAssigned": [
+                "example@domain.com"
+            ],
+            "pin": "12345678",
+            "uniqueID": "unique1@domain.com"
+        }
+    ],
     "caretakersList": [],
     "baseCaretaker": {
         "name": "",
         "age": "",
         "patientAssigned": "",
-        "uniqueID" : ""
+        "uniqueID": "",
+        "pin": ""
     },
     "baseDoctor": {
         "name": "",
         "age": "",
         "patientsAssigned": [],
         "pin": "",
-        "uniqueID" : ""
+        "uniqueID": ""
     },
     "basePatient": {
         "name": "",
         "age": "",
         "uniqueID": "",
+        "pin": "",
         "disease": "",
         "bodySensors": [],
         "houseSensors": [],

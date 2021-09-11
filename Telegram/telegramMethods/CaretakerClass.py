@@ -33,5 +33,25 @@ class Caretaker():
 
         return frame
 
-    def sendFrame(self, ipAddress, frame):
+    def registerAccount(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+
+        frame = {
+            "userName" : datum_list.pop(0),
+            "pin" : datum_list.pop(0)
+        }
+
+        return frame
+
+    def sendFrame(self, ipAddress, frame) -> None:
         requests.post(ipAddress, json=frame)
+
+    def updateFrame(self, ipAddress, frame) -> None:
+        requests.put(ipAddress, json=frame)
+
+    def deleteField(self, ipAddress, datum) -> None:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+
+        requests.delete(ipAddress+'/'+datum_list.pop(0))
