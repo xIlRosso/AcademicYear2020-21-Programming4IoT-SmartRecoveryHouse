@@ -307,4 +307,85 @@ class POST_manager():
             smt["Regr_Values"]["HeartR"] = data["HeartR"]
             
             json.dump(smt, open(_set_path,'w'), indent=4)
+            
+        elif self.path[0]=="telegram":
+            _set_path="settings.json"   
+            with open(_set_path) as json_in:
+                all_data=json.load(json_in)
+            if self.path[1]=="addPatient":
+                
+                newPatient = all_data["basePatient"].copy()
+                
+                newPatient["name"] = data["name"]
+                newPatient["age"] = data["age"]
+                newPatient["uniqueID"] = data["uniqueID"]
+                newPatient["disease"] = data["disease"]
+                
+                for sens in data["bodySensors"]:
+                    sens = sens.lower()
+                    newSensor = all_data["baseSensor"].copy()
+                    
+                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" + sens
+                    newSensor["patientID"] = newPatient["uniqueID"]
+                    newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
+                    newSensor["e"][0]["n"] = sens      
+                    newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
+                    
+                    newPatient["bodyDevices"].append(newSensor)
+                    
+                for sens in data["houseSensors"]:
+                    sens = sens.lower()
+                    newSensor = all_data["baseSensor"].copy()
+                    
+                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/" + sens
+                    newSensor["patientID"] = newPatient["uniqueID"]
+                    newSensor["bn"] = newPatient["uniqueID"] + "/house/" + sens
+                    newSensor["e"][0]["n"] = sens      
+                    newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
+                    
+                    newPatient["houseDevices"].append(newSensor)
+                    
+                for actuator in data["controlledActuators"]:
+                    actuator = actuator.lower()
+                    newActuator = all_data["baseActuator"].copy()
+                    
+                    newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/" + actuator
+                    newActuator["patientID"] = newPatient["uniqueID"]
+                    newActuator["unit"] = all_data["supportedSensors"][actuator]
+                    newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"Low"]) 
+                    newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"High"])
+                    
+                    newPatient["actuatorsList"].append(newActuator)
+                    
+                all_data["patientsList"].append(newPatient)
+                json.dump(all_data, open(_set_path,"w"), indent=4)
+                
+            elif self.path[1]=="addDoctor":
+                
+                newDoctor = all_data["baseDoctor"].copy()
+                
+                newDoctor["age"] = data["age"]
+                newDoctor["name"] = data["name"]
+                newDoctor["patientsAssigned"] = data["patientsAssigned"]
+                
+                all_data["doctorsList"].append(newDoctor)
+                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                
+            elif self.path[1]=="addCaretaker":
+                
+                newCaretaker = all_data["baseCaretaker"].copy()
+                
+                newCaretaker["age"] = data["age"]
+                newCaretaker["name"] = data["name"]
+                newCaretaker["patientAssigned"] = data["patientAssigned"]
+                
+                all_data["caretakersList"].append(newCaretaker)
+                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                
+                
+                    
+                
+                         
+            
+                
 

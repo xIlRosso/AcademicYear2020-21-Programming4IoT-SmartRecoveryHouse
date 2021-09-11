@@ -2,6 +2,72 @@
     "project_Name": "MySmartRecHouse",
     "broker": "broker.hivemq.com",
     "port": 1883,
+    "baseTopic" : "programming_for_iot/aa2021/SmartRecoveryHouse"
+    "patientsList" : [],
+    "doctorsList" : [],
+    "caretakersList" : [],
+    "baseCaretaker":{
+        "name" : "",
+        "age" : "",
+        "patientAssigned" : ""
+    }
+    "baseDoctor" : {
+        "name" : "",
+        "age" : "",
+        "patientsAssigned" : []
+    }
+    "basePatient": [
+         {
+            "name" : "",
+            "age" : "",
+            "uniqueID" : "",
+            "disease" : "",
+            "bodySensors" : [],
+            "houseSensors" : [],
+            "controlledActuators" : [],
+            "address" : ""
+            "bodyDevices" : [],
+            "houseDevices" : [],
+            "actuatorsList" : []
+        }
+    ],
+    "baseSensor":{
+        "topic" : "",
+        "patientID" : "",
+        "bn": "",
+        "e": [
+            {
+                "n": "",
+                "u": "",
+                "t": "",
+                "v": 0
+            }
+        ]
+    },
+    "baseActuator" : {
+        "topic" : "",
+        "patientID" : "",
+        "unit" : "",
+        "tresholds" : [],
+        "state" : "" 
+    },
+    "defaultActuatorValues" : {
+        "temperatureLow" : 19,
+        "temperatureHigh" : 21,
+        "lumenLow" : 450,
+        "lumenHigh" : 550,
+        "humidityLow" : 30,
+        "humidityHigh" : 50,
+        "timeLow" : "06:00:00",
+        "timeHigh" : "20:00:00"
+    },
+    "supportedSensors" : {
+        "temperature" : "C",
+        "lumen" : "lm",
+        "humidity" : "%",
+        "weight" : "kg",
+        "heartrate" : "bpm"
+    }
     "devicesList": [
         {
             "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/1",

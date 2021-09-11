@@ -41,7 +41,8 @@ class Patient:
             "disease" : self.disease,
             "bodySensors" : self.bodySensors,
             "houseSensors" : self.houseSensors,
-            "controlledActuators" : self.controlledActuators
+            "controlledActuators" : self.controlledActuators,
+            "address" : ""
         }
 
         return json.dumps(frame)
