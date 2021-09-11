@@ -18,6 +18,7 @@ class Subscribers:
         self.topic=topic
         self.messageBroker=broker
         self._paho_client.on_connect=self.myOnConnect
+        self._paho_client.on_message=self.myOnMsgReceived
         self.port=port
         
     def start(self):

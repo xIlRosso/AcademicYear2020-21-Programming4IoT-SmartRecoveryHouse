@@ -3,7 +3,12 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import json, time
 import requests
-import telegramMethods as tm
+# import telegramMethods as tm
+from telegramMethods.MyMQTT import *
+from telegramMethods.MQTT_telegram import *
+from telegramMethods.DoctorClass import *
+from telegramMethods.CaretakerClass import *
+from telegramMethods.PatientClass import *
 
 
 
@@ -29,7 +34,7 @@ class SwitchBot:
         self.catalog = address
         self.tokenBot = token
         self.bot = telepot.Bot(self.tokenBot)
-        self.client = tm.MyMQTT.MyMQTT("telegramBot",broker,port,None)
+        self.client = MyMQTT("telegramBot",broker,port,None)
         self.client.start()
         self.topic = topic
         self._message = {'bn': "telegrambot",
@@ -93,7 +98,7 @@ class SwitchBot:
         message = msg['text']
         global flagID
         global flagFolder
-        with open("explanation_messages.json") as json_in:
+        with open("Telegram/explanation_messages.json") as json_in:
             explanations = json.load(json_in)
         
         r=requests.get(catalog_address+"/telegram_bot/pin_ids")
@@ -183,27 +188,27 @@ class SwitchBot:
             self.bot.sendMessage(chat_ID, text = self.supportedFeatures())
 
         elif name_field == '/addPatient':
-            pObj = tm.PatientClass.Patient()
+            pObj = Patient()
             frame = pObj.createFrame(val_field)
             pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
 
         elif name_field == '/addPatientAddress':
-            pObj = tm.PatientClass.Patient()
+            pObj = Patient()
             frame = pObj.addAddress(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateAddress", frame) #put request
 
         elif name_field == '/addDoctor':
-            dObj = tm.DoctorClass.Doctor()
+            dObj = Doctor()
             frame = dObj.createFrame(val_field)
             dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
 
         elif name_field == '/addCaretaker':
-            cObj = tm.CaretakerClass.Caretaker()
+            cObj = Caretaker()
             frame = cObj.createFrame(val_field)
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
 
         elif name_field == '/updateActuator':
-            pObj = tm.PatientClass.Patient()
+            pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateActuator", frame) #put request
 
@@ -251,10 +256,10 @@ class SwitchBot:
 
 if __name__ == "__main__":
 
-    with open("catalog_mqtt_settings.json","r") as json_in:
+    with open("Telegram/catalog_mqtt_settings.json","r") as json_in:
         setsCatalog = json.load(json_in)
 
-    S=tm.MQTT_telegram.Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
+    S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
     i=0
     while i<10:
         S.start()

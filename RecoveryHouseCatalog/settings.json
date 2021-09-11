@@ -2,7 +2,7 @@
     "project_Name": "MySmartRecHouse",
     "broker": "broker.hivemq.com",
     "port": 1883,
-    "baseTopic" : "programming_for_iot/aa2021/SmartRecoveryHouse"
+    "baseTopic" : "programming_for_iot/aa2021/SmartRecoveryHouse",
     "patientsList" : [],
     "doctorsList" : [],
     "caretakersList" : [],
@@ -26,7 +26,7 @@
             "bodySensors" : [],
             "houseSensors" : [],
             "controlledActuators" : [],
-            "address" : ""
+            "address" : "",
             "bodyDevices" : [],
             "houseDevices" : [],
             "actuatorsList" : []
@@ -74,7 +74,7 @@
         "lumen" : "lm",
         "humidity" : "%",
         "time" : "s"
-    }
+    },
     "devicesList": [
         {
             "bn": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/1",
