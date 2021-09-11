@@ -62,11 +62,26 @@ class Patient:
 
         return json.dumps(frame)
 
+    def updateActuatorVal(self, datum) -> str:
+        datum_list = datum.split('/')
+        self.uniqueID = datum_list.pop(0)
+        actName = datum_list.pop(0)
+        actLow = datum_list.pop(0)
+        actHigh = datum_list.pop(0)
+
+        frame = {
+            "uniqueID" : self.uniqueID,
+            "actName" : actName,
+            "actLow" : actLow,
+            "actHigh" : actHigh
+        }
+
+        return json.dumps(frame)
 
     def sendFrame(self, ipAddress, frame) -> None:
         requests.post(ipAddress, frame)
 
-    def sendAddress(self, ipAddress, frame) -> None:
+    def updateFrame(self, ipAddress, frame) -> None:
         requests.put(ipAddress, frame)
 
     #maybe add put requests for updating fields

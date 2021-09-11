@@ -46,7 +46,7 @@
     "baseActuator" : {
         "topic" : "",
         "patientID" : "",
-        "unit" : "",
+        "name" : "",
         "tresholds" : [],
         "state" : "" 
     },

@@ -144,7 +144,7 @@ class SwitchBot:
         elif name_field == '/addPatientAddress':
             pObj = tm.PatientClass.Patient()
             frame = pObj.addAddress(val_field)
-            pObj.sendAddress(catalog_address + "/telegram/updateAddress", frame) #put request
+            pObj.updateFrame(catalog_address + "/telegram/updateAddress", frame) #put request
 
         elif name_field == '/addDoctor':
             dObj = tm.DoctorClass.Doctor()
@@ -155,6 +155,11 @@ class SwitchBot:
             cObj = tm.CaretakerClass.Caretaker()
             frame = cObj.createFrame(val_field)
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
+
+        elif name_field == '/updateActuator':
+            pObj = tm.PatientClass.Patient()
+            frame = pObj.updateActuatorVal(val_field)
+            pObj.updateFrame(catalog_address + "/telegram/updateActuator", frame) #put request
 
         # elif name_field == '/folder/name':
         #     # message=val_field

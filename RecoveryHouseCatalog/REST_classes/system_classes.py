@@ -351,7 +351,7 @@ class POST_manager():
                     
                     newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/" + actuator
                     newActuator["patientID"] = newPatient["uniqueID"]
-                    newActuator["unit"] = all_data["supportedSensors"][actuator]
+                    newActuator["name"] = all_data["supportedSensors"][actuator]
                     newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"Low"]) 
                     newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"High"])
                     
@@ -401,6 +401,17 @@ class PUT_manager():
                         patient["address"] = data["address"]
                         
                 json.dump(all_data, open(_set_path, "w"), indent = 4)
+                
+            if self.path[1] == "updateActuator":
+                for patient in all_data["patientsList"]:
+                    if patient["uniqueID"] == data["uniqueID"]:
+                        actList = patient["actuatorsList"]
+                        for actuator in actList:
+                            if actuator["name"] == data["actName"]:
+                                actuator["tresholds"][0]=data["actLow"]
+                                actuator["tresholds"][1]=data["actHigh"]
+                                
+                json.dump(all_data, open(_set_path,"w"), indent = 4)
             
                 
 
