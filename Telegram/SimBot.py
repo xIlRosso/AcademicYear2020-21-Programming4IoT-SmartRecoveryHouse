@@ -67,9 +67,11 @@ class SwitchBot:
 
     def split_message(self, msg):
         name_field=msg.split('/')
-        name_field.pop(0)
-        tmp_var='/'+name_field[0]+'/'+name_field[1]
-        val_field=name_field[2]
+        tmp_var='/'+name_field.pop(0)
+
+        val_field = ""
+        while name_field != []:
+            val_field += name_field.pop(0) + " "
 
 
         return tmp_var, val_field
@@ -85,7 +87,7 @@ class SwitchBot:
         pins = r.json()
         if flagFolder!=999:
             name_field, val_field=self.split_message(message)
-            print(name_field)
+
 
         if message == "/start":
             self.bot.sendMessage(chat_ID, text='Please insert pin')
@@ -97,11 +99,12 @@ class SwitchBot:
 
             self.bot.sendMessage(chat_ID, text='Select an option', reply_markup=keyboard)
 
-        elif message == "/folder" and flagID == 1:
-            buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        # elif message == "/folder" and flagID == 1:
+        #     buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
 
-            self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
+        #     self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
+    
 
         elif message == "/Sim" and flagID == 1:
             buttons=[[InlineKeyboardButton(text=f'Temp Fever', callback_data=self.send_simulations("r","y","Temp_sim")),
@@ -133,21 +136,30 @@ class SwitchBot:
             flagID = 1
             self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
 
+        elif name_field == '/addPatient':
+            pObj = tm.PatientClass.Patient()
+            frame = pObj.createFrame(val_field)
+            pObj.sendFrame(catalog_address + "/telegram/addpatient", frame)
 
-        elif name_field == '/folder/name':
-            # message=val_field
-            self.folder['Name'] = val_field
-            #/folder/name/Giovanni
-        elif name_field == '/folder/age' :
-            self.folder['Age'] = val_field
-        elif name_field == '/folder/height' :
-            self.folder['Height'] = val_field
-        elif name_field == '/folder/weight' :
-            self.folder['Weight'] = val_field                        
-        elif name_field == '/folder/diagnostic' :
-            self.folder['Diagnostic'] = val_field
-            requests.post(catalog_address+"/folder_patient", json=self.folder)
-            flagFolder=999
+        elif name_field == '/addPatientAddress':
+            pObj = tm.PatientClass.Patient()
+            frame = pObj.addAddress(val_field)
+            pObj.sendAddress(catalog_address + "/telegram/updateAddress", frame)
+
+        # elif name_field == '/folder/name':
+        #     # message=val_field
+        #     self.folder['Name'] = val_field
+        #     #/folder/name/Giovanni
+        # elif name_field == '/folder/age' :
+        #     self.folder['Age'] = val_field
+        # elif name_field == '/folder/height' :
+        #     self.folder['Height'] = val_field
+        # elif name_field == '/folder/weight' :
+        #     self.folder['Weight'] = val_field                        
+        # elif name_field == '/folder/diagnostic' :
+        #     self.folder['Diagnostic'] = val_field
+        #     requests.post(catalog_address+"/folder_patient", json=self.folder)
+        #     flagFolder=999
 
         else:
             self.bot.sendMessage(chat_ID, text="Command not supported")
