@@ -3,7 +3,6 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import json, time
 import requests
-from MyMQTT import *
 import telegramMethods as tm
 
 
@@ -29,7 +28,7 @@ class SwitchBot:
         self.catalog = address
         self.tokenBot = token
         self.bot = telepot.Bot(self.tokenBot)
-        self.client = MyMQTT("telegramBot",broker,port,None)
+        self.client = tm.MyMQTT.MyMQTT("telegramBot",broker,port,None)
         self.client.start()
         self.topic = topic
         self._message = {'bn': "telegrambot",
