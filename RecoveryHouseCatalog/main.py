@@ -10,8 +10,7 @@ REST server main file
 
 
 import cherrypy
-from REST_classes.system_classes import GET_manager, POST_manager
-from pyngrok import ngrok
+from REST_classes.system_classes import GET_manager, POST_manager, PUT_manager
 
 
 class HouseRecoveryCatalog(object):
@@ -35,8 +34,14 @@ class HouseRecoveryCatalog(object):
         return output_get
 
     
-    def PUT(self):
-        pass
+    @cherrypy.tools.json_out()  
+    @cherrypy.tools.json_in()
+    
+    def PUT(self, *path):
+        data=cherrypy.request.json
+        objPUT=PUT_manager(path)
+        objPUT.run(data)
+            
     
     def DELETE(self):
         pass

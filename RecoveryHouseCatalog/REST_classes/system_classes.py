@@ -385,7 +385,22 @@ class POST_manager():
                 
                     
                 
-                         
+class PUT_manager():
+    def __init__(self, path):
+        self.path=path
+        
+    def run(self, data):
+        _set_path = "settings.json"
+        with open(_set_path) as json_in:
+            all_data=json.load(json_in)
+            
+        if self.path[0] == "telegram":
+            if self.path[1] == "updateAddress":
+                for patient in all_data["patientsList"]:
+                    if patient["uniqueID"] == data["uniqueID"]:
+                        patient["address"] = data["address"]
+                        
+                json.dump(all_data, open(_set_path, "w"), indent = 4)
             
                 
 
