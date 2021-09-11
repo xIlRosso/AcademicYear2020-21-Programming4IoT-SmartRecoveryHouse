@@ -4,7 +4,7 @@ import requests
 class Patient:
     
     name = ""
-    age = ""
+    age = 0
     uniqueID = ""
     disease = ""
     bodySensors = []
@@ -18,7 +18,7 @@ class Patient:
     def buildAttributes(self, datum) -> None:
         datum_list = datum.split('/')
         self.name = datum_list.pop(0)
-        self.age = datum_list.pop(0)
+        self.age = int(datum_list.pop(0))
         self.uniqueID = datum_list.pop(0)
         self.disease = datum_list.pop(0)
         if datum_list[0].lower() == "bodysensors" : 
@@ -35,22 +35,14 @@ class Patient:
 
     def createFrame(self) -> str:
         frame = {
-            "name" : "",
-            "age" : "",
-            "uniqueID" : "",
-            "disease" : "",
-            "bodySensors" : [],
-            "houseSensors" : [],
-            "controlledActuators" : []
+            "name" : self.name,
+            "age" : self.age,
+            "uniqueID" : self.uniqueID,
+            "disease" : self.disease,
+            "bodySensors" : self.bodySensors,
+            "houseSensors" : self.houseSensors,
+            "controlledActuators" : self.controlledActuators
         }
-
-        frame["name"] = self.name
-        frame["age"] = self.age
-        frame["uniqueID"] = self.uniqueID
-        frame["disease"] = self.disease
-        frame["bodySensors"] = self.bodySensors
-        frame["houseSensors"] = self.houseSensors
-        frame["controlledActuators"] = self.controlledActuators
 
         return json.dumps(frame)
 

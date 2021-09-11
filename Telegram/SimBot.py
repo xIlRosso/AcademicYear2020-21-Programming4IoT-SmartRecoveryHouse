@@ -71,7 +71,7 @@ class SwitchBot:
 
         val_field = ""
         while name_field != []:
-            val_field += name_field.pop(0) + " "
+            val_field += "/" +name_field.pop(0)
 
 
         return tmp_var, val_field
@@ -139,12 +139,17 @@ class SwitchBot:
         elif name_field == '/addPatient':
             pObj = tm.PatientClass.Patient()
             frame = pObj.createFrame(val_field)
-            pObj.sendFrame(catalog_address + "/telegram/addpatient", frame)
+            pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
 
         elif name_field == '/addPatientAddress':
             pObj = tm.PatientClass.Patient()
             frame = pObj.addAddress(val_field)
-            pObj.sendAddress(catalog_address + "/telegram/updateAddress", frame)
+            pObj.sendAddress(catalog_address + "/telegram/updateAddress", frame) #put request
+
+        elif name_field == '/addDoctor':
+            dObj = tm.DoctorClass.Doctor()
+            frame = dObj.createFrame(val_field)
+            dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
 
         # elif name_field == '/folder/name':
         #     # message=val_field
