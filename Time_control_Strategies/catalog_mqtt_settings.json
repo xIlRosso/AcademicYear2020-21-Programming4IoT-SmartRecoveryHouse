@@ -1,0 +1,6 @@
+{
+    "ID" : "Beacon_CaptureTelegram",
+    "broker" : "broker.hivemq.com",
+    "port" : 1883,
+    "topic" : "programming_for_iot/aa2021/SmartRecoveryHouse/catalog_public_address"
+}

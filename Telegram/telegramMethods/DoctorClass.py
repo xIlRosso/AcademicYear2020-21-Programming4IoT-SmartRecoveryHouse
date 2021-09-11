@@ -5,6 +5,7 @@ class Doctor:
 
     name = ""
     age = 0
+    uniqueID = ""
     patientsAssigned = []
 
 
@@ -17,6 +18,7 @@ class Doctor:
 
         self.name = datum_list.pop(0)
         self.age = int(datum_list.pop(0))
+        self.uniqueID = datum_list.pop(0)
 
         if datum_list[0].lower() == "patientsassigned":
             datum_list.pop(0)
@@ -24,15 +26,16 @@ class Doctor:
             while datum_list != []:
                 self.patientsAssigned.append(datum_list.pop(0))
 
-    def createFrame(self) -> str:
+    def createFrame(self) -> dict:
         
         frame = {
             "name" : self.name,
             "age" : self.age,
-            "patientsAssigned" : self.patientsAssigned
+            "patientsAssigned" : self.patientsAssigned,
+            "uniqueID" : self.uniqueID
         }
 
-        return json.dumps(frame)
+        return frame
 
     def sendFrame(self, ipAddress, frame):
-        requests.post(ipAddress, frame)
+        requests.post(ipAddress, json=frame)

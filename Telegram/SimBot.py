@@ -72,6 +72,7 @@ class SwitchBot:
 
     def split_message(self, msg):
         name_field=msg.split('/')
+        name_field.pop(0)
         tmp_var='/'+name_field.pop(0)
 
         val_field = ""
@@ -87,7 +88,7 @@ class SwitchBot:
         ansSupported = ""
         for key in dicts:
             ansSupported += key + ": "
-            for keys in key:
+            for keys in dicts[key]:
                 ansSupported+= keys + ", "
             ansSupported += ". "
         
@@ -117,11 +118,11 @@ class SwitchBot:
 
             self.bot.sendMessage(chat_ID, text='Select an option', reply_markup=keyboard)
 
-        # elif message == "/folder" and flagID == 1:
-        #     buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
-        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        elif message == "/folder" and flagID == 1:
+            buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
+            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
 
-        #     self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
+            self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
     
 
         elif message == "/Sim" and flagID == 1:
@@ -189,8 +190,10 @@ class SwitchBot:
 
         elif name_field == '/addPatient':
             pObj = Patient()
-            frame = pObj.createFrame(val_field)
+            pObj.buildAttributes(val_field)
+            frame = pObj.createFrame()
             pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
+            self.bot.sendMessage(chat_ID, text = json.dumps(frame))
 
         elif name_field == '/addPatientAddress':
             pObj = Patient()
@@ -199,12 +202,14 @@ class SwitchBot:
 
         elif name_field == '/addDoctor':
             dObj = Doctor()
-            frame = dObj.createFrame(val_field)
+            dObj.buildAttributes(val_field)
+            frame = dObj.createFrame()
             dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
 
         elif name_field == '/addCaretaker':
             cObj = Caretaker()
-            frame = cObj.createFrame(val_field)
+            cObj.buildAttributes(val_field)
+            frame = cObj.createFrame()
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
 
         elif name_field == '/updateActuator':

@@ -17,6 +17,7 @@ class Patient:
 
     def buildAttributes(self, datum) -> None:
         datum_list = datum.split('/')
+        datum_list.pop(0)
         self.name = datum_list.pop(0)
         self.age = int(datum_list.pop(0))
         self.uniqueID = datum_list.pop(0)
@@ -33,7 +34,7 @@ class Patient:
                 self.controlledActuators.append(datum_list.pop(0))
 
 
-    def createFrame(self) -> str:
+    def createFrame(self) -> dict:
         frame = {
             "name" : self.name,
             "age" : self.age,
@@ -45,9 +46,9 @@ class Patient:
             "address" : ""
         }
 
-        return json.dumps(frame)
+        return frame
 
-    def addAddress(self, datum) -> str:
+    def addAddress(self, datum) -> dict:
         datum_list = datum.split('/')
         self.uniqueID = datum_list.pop(0)
         address_list = datum_list.pop(0).split('_')
@@ -60,9 +61,9 @@ class Patient:
             "address" : address
         }
 
-        return json.dumps(frame)
+        return frame
 
-    def updateActuatorVal(self, datum) -> str:
+    def updateActuatorVal(self, datum) -> dict:
         datum_list = datum.split('/')
         self.uniqueID = datum_list.pop(0)
         actName = datum_list.pop(0)
@@ -76,13 +77,13 @@ class Patient:
             "actHigh" : actHigh
         }
 
-        return json.dumps(frame)
+        return frame
 
     def sendFrame(self, ipAddress, frame) -> None:
-        requests.post(ipAddress, frame)
+        requests.post(ipAddress, json=frame)
 
     def updateFrame(self, ipAddress, frame) -> None:
-        requests.put(ipAddress, frame)
+        requests.put(ipAddress, json=frame)
 
     #maybe add put requests for updating fields
     

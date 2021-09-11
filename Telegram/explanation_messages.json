@@ -1,7 +1,7 @@
 {
     "addPatient" : "To add a new patient write the fields as in the example: /addPatient/George_Washington/54/example@domain.com/chronicKidneyDisease/bodySensors/temperature/bloodPressure/houseSensors/temperature/humidity/controlledActuators/bedroomlights",
-    "addDoctor" : "To add a new doctor write the fields as in the example: /addDoctor/Che_Guevara/49/patientsAssigned/example1@domain.com/example2@domain.com/example3@domain.com",
-    "addCaretaker" : "To add a new caretaker write the fields as in the example: /addCaretaker/Name_Surname/25/patientsAssigned/example@domain.com",
+    "addDoctor" : "To add a new doctor write the fields as in the example: /addDoctor/Che_Guevara/49/unique@domain.com/patientsAssigned/example1@domain.com/example2@domain.com/example3@domain.com",
+    "addCaretaker" : "To add a new caretaker write the fields as in the example: /addCaretaker/Name_Surname/25/unique@domain.com/patientsAssigned/example@domain.com",
     "addPatientAddress" : "To add a patient address write the fields as in the example: /addPatientAddress/example@domain.com/O_Connels_St_56",
     "updateActuator" : "To update an actuator treshold of a given patient write the fields as in the following example: /updateActuator/example@domain.com/temperature/17/25"
 }

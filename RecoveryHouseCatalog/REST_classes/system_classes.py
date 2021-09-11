@@ -6,6 +6,7 @@ Created on Fri Feb 12 18:56:07 2021
 """
 
 import json
+import copy
 
 
 class GET_manager(object):
@@ -355,74 +356,102 @@ class POST_manager():
             with open(_set_path) as json_in:
                 all_data=json.load(json_in)
             if self.path[1]=="addPatient":
-                
-                newPatient = all_data["basePatient"].copy()
-                
-                newPatient["name"] = data["name"]
-                newPatient["age"] = data["age"]
-                newPatient["uniqueID"] = data["uniqueID"]
-                newPatient["disease"] = data["disease"]
-                
-                for sens in data["bodySensors"]:
-                    sens = sens.lower()
-                    newSensor = all_data["baseSensor"].copy()
+                found = False
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if data["uniqueID"] == patient["uniqueID"]:
+                            found = True
                     
-                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" + sens
-                    newSensor["patientID"] = newPatient["uniqueID"]
-                    newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
-                    newSensor["e"][0]["n"] = sens      
-                    newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
+                if not found:
+                    newPatient = copy.deepcopy(all_data["basePatient"])
                     
-                    newPatient["bodyDevices"].append(newSensor)
+                    newPatient["name"] = data["name"]
+                    newPatient["age"] = data["age"]
+                    newPatient["uniqueID"] = data["uniqueID"]
+                    newPatient["disease"] = data["disease"]
                     
-                for sens in data["houseSensors"]:
-                    sens = sens.lower()
-                    newSensor = all_data["baseSensor"].copy()
-                    
-                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/"
-                    newSensor["patientID"] = newPatient["uniqueID"]
-                    newSensor["bn"] = newPatient["uniqueID"] + "/house/" + sens
-                    newSensor["e"][0]["n"] = sens      
-                    newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
-                    
-                    newPatient["houseDevices"].append(newSensor)
-                    
-                for actuator in data["controlledActuators"]:
-                    actuator = actuator.lower()
-                    newActuator = all_data["baseActuator"].copy()
-                    
-                    newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/" + actuator
-                    newActuator["patientID"] = newPatient["uniqueID"]
-                    newActuator["unit"] = all_data["supportedActuators"][actuator]
-                    newActuator["name"] = actuator
-                    newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"Low"]) 
-                    newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"High"])
-                    
-                    newPatient["actuatorsList"].append(newActuator)
-                    
-                all_data["patientsList"].append(newPatient)
+                    for sens in data["bodySensors"]:
+                        sens = sens.lower()
+                        newSensor = copy.deepcopy(all_data["baseSensor"])
+                        
+                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" 
+                        newSensor["patientID"] = newPatient["uniqueID"]
+                        newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
+                        newSensor["e"][0]["n"] = sens      
+                        newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
+                        
+                        newPatient["bodyDevices"].append(newSensor)
+                        newSensor = None
+                        
+                        
+                    for sens in data["houseSensors"]:
+                        sens = sens.lower()
+                        newSensor = copy.deepcopy(all_data["baseSensor"])
+                        
+                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/"
+                        newSensor["patientID"] = newPatient["uniqueID"]
+                        newSensor["bn"] = newPatient["uniqueID"] + "/house/" + sens
+                        newSensor["e"][0]["n"] = sens      
+                        newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
+                        
+                        newPatient["houseDevices"].append(newSensor)
+                        newSensor = None
+                        
+                    for actuator in data["controlledActuators"]:
+                        actuator = actuator.lower()
+                        newActuator = copy.deepcopy(all_data["baseActuator"])
+                        
+                        newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/"
+                        newActuator["patientID"] = newPatient["uniqueID"]
+                        newActuator["unit"] = all_data["supportedActuators"][actuator]
+                        newActuator["name"] = actuator
+                        newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"Low"]) 
+                        newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"High"])
+                        
+                        newPatient["actuatorsList"].append(newActuator)
+                        newActuator = None
+                        
+                    all_data["patientsList"].append(newPatient)
                 json.dump(all_data, open(_set_path,"w"), indent=4)
                 
             elif self.path[1]=="addDoctor":
                 
                 newDoctor = all_data["baseDoctor"].copy()
+                found = False
                 
-                newDoctor["age"] = data["age"]
-                newDoctor["name"] = data["name"]
-                newDoctor["patientsAssigned"] = data["patientsAssigned"]
+                if all_data["doctorsList"] != []:
+                    for doctor in all_data["doctorsList"]:
+                        if doctor["uniqueID"] == data["uniqueID"]:
+                            found = True
                 
-                all_data["doctorsList"].append(newDoctor)
+                if not found:
+                    newDoctor["age"] = data["age"]
+                    newDoctor["name"] = data["name"]
+                    newDoctor["patientsAssigned"] = data["patientsAssigned"]
+                    newDoctor["uniqueID"] = data["uniqueID"]
+                    
+                    all_data["doctorsList"].append(newDoctor)
                 json.dump(all_data, open(_set_path,"w"), indent = 4)
                 
             elif self.path[1]=="addCaretaker":
                 
                 newCaretaker = all_data["baseCaretaker"].copy()
+                found = False
                 
-                newCaretaker["age"] = data["age"]
-                newCaretaker["name"] = data["name"]
-                newCaretaker["patientAssigned"] = data["patientAssigned"]
+                if all_data["caretakersList"] != []:
+                    for caretaker in all_data["caretakersList"]:
+                        if caretaker["uniqueID"] == data["uniqueID"]:
+                            found = True
                 
-                all_data["caretakersList"].append(newCaretaker)
+                if not found:
+                
+                    newCaretaker["age"] = data["age"]
+                    newCaretaker["name"] = data["name"]
+                    newCaretaker["patientAssigned"] = data["patientAssigned"]
+                    newCaretaker["uniqueID"] = data["uniqueID"]
+                    
+                    all_data["caretakersList"].append(newCaretaker)
+                    
                 json.dump(all_data, open(_set_path,"w"), indent = 4)
                 
                 

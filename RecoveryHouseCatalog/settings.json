@@ -2,38 +2,40 @@
     "project_Name": "MySmartRecHouse",
     "broker": "broker.hivemq.com",
     "port": 1883,
-    "baseTopic" : "programming_for_iot/aa2021/SmartRecoveryHouse",
-    "patientsList" : [],
-    "doctorsList" : [],
-    "caretakersList" : [],
-    "baseCaretaker":{
-        "name" : "",
-        "age" : "",
-        "patientAssigned" : ""
+    "baseTopic": "programming_for_iot/aa2021/SmartRecoveryHouse",
+    "patientsList": [
+    ],
+    "doctorsList": [],
+    "caretakersList": [],
+    "baseCaretaker": {
+        "name": "",
+        "age": "",
+        "patientAssigned": "",
+        "uniqueID" : ""
     },
-    "baseDoctor" : {
-        "name" : "",
-        "age" : "",
-        "patientsAssigned" : [],
-        "pin" : ""
+    "baseDoctor": {
+        "name": "",
+        "age": "",
+        "patientsAssigned": [],
+        "pin": "",
+        "uniqueID" : ""
     },
-    "basePatient": 
-         {
-            "name" : "",
-            "age" : "",
-            "uniqueID" : "",
-            "disease" : "",
-            "bodySensors" : [],
-            "houseSensors" : [],
-            "controlledActuators" : [],
-            "address" : "",
-            "bodyDevices" : [],
-            "houseDevices" : [],
-            "actuatorsList" : []
-        },
-    "baseSensor":{
-        "topic" : "",
-        "patientID" : "",
+    "basePatient": {
+        "name": "",
+        "age": "",
+        "uniqueID": "",
+        "disease": "",
+        "bodySensors": [],
+        "houseSensors": [],
+        "controlledActuators": [],
+        "address": "",
+        "bodyDevices": [],
+        "houseDevices": [],
+        "actuatorsList": []
+    },
+    "baseSensor": {
+        "topic": "",
+        "patientID": "",
         "bn": "",
         "e": [
             {
@@ -44,41 +46,50 @@
             }
         ]
     },
-    "baseActuator" : {
-        "topic" : "",
-        "patientID" : "",
-        "unit" : "",
-        "name" : "",
-        "tresholds" : [],
-        "state" : "" 
+    "baseActuator": {
+        "topic": "",
+        "patientID": "",
+        "unit": "",
+        "name": "",
+        "tresholds": [],
+        "state": ""
     },
-    "defaultActuatorValues" : {
-        "temperatureLow" : 19,
-        "temperatureHigh" : 21,
-        "lumenLow" : 450,
-        "lumenHigh" : 550,
-        "humidityLow" : 30,
-        "humidityHigh" : 50,
-        "timeLow" : "06:00:00",
-        "timeHigh" : "20:00:00"
+    "defaultActuatorValues": {
+        "temperatureLow": 19,
+        "temperatureHigh": 21,
+        "lumenLow": 450,
+        "lumenHigh": 550,
+        "humidityLow": 30,
+        "humidityHigh": 50,
+        "timeLow": "06:00:00",
+        "timeHigh": "20:00:00"
     },
-    "supportedSensors" : {
-        "temperature" : "C",
-        "lumen" : "lm",
-        "humidity" : "%",
-        "weight" : "kg",
-        "heartrate" : "bpm"
+    "supportedSensors": {
+        "temperature": "C",
+        "lumen": "lm",
+        "humidity": "%",
+        "weight": "kg",
+        "heartrate": "bpm"
     },
     "supportedActuators": {
-        "temperature" : "C",
-        "lumen" : "lm",
-        "humidity" : "%",
-        "time" : "s"
+        "temperature": "C",
+        "lumen": "lm",
+        "humidity": "%",
+        "time": "s"
     },
-    "meanAndVarSensorsHouse":{
-        "temperature" : {"mean" : 20, "var" : 0.5},
-        "humidity" : {"mean": 40, "var": 5},
-        "lumen" : {"mean": 300,"var": 40}
+    "meanAndVarSensorsHouse": {
+        "temperature": {
+            "mean": 20,
+            "var": 0.5
+        },
+        "humidity": {
+            "mean": 40,
+            "var": 5
+        },
+        "lumen": {
+            "mean": 300,
+            "var": 40
+        }
     },
     "devicesList": [
         {
@@ -190,8 +201,8 @@
         }
     ],
     "TG_Token": [
-        "1839018512:AAGKLDN9cBCSG6sDQOM1wIwBFzmzZ3XciHM",
-        "1949918855:AAFbs02XkEKuqBUlzAurm8CSEJA-YGh650A"
+        "1949918855:AAGvqSbLmzkj5qE1aEZeLGtqQGz0FI4q5L4",
+        "1839018512:AAGMuH2BMnvN--7J-9QmsHVd0qNKokkiCYk"
     ],
     "Topics_List": {
         "patients1": "programming_for_iot/aa2021/SmartRecoveryHouse/ecosystem/sensors/1",
