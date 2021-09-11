@@ -151,6 +151,11 @@ class SwitchBot:
             frame = dObj.createFrame(val_field)
             dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
 
+        elif name_field == '/addCaretaker':
+            cObj = tm.CaretakerClass.Caretaker()
+            frame = cObj.createFrame(val_field)
+            cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
+
         # elif name_field == '/folder/name':
         #     # message=val_field
         #     self.folder['Name'] = val_field
