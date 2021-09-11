@@ -14,6 +14,37 @@ class GET_manager(object):
         
     def run(self):
 
+        if self.path[0]=='sensors':
+            _set_path="settings.json"
+            with open(_set_path) as json_file:
+                data=json.load(json_file)
+            
+            if self.path[1]=='house':
+                #we need to send the basic setup for the sensors of the house
+                resp = {
+                    "broker" : data["broker"],
+                    "port" : data["port"],
+                    "temperature" : data["meanAndVarSensorsHouse"]["temperature"],
+                    "humidity" : data["meanAndVarSensorsHouse"]["humidity"],
+                    "lumen" : data["meanAndVarSensorsHouse"]["lumen"]
+                    }
+                
+                return json.dumps(resp)
+                
+                
+            if self.path[1]=='house_list':
+                resp = []
+                
+                for patient in data["patientsList"]:
+                    resp.append(patient["houseDevices"])
+                    
+                return json.dumps(resp)
+                #we need to get all the sensors from all the houses, publish on house-based topics
+                
+
+
+
+
         if self.path[0]=='sensor':
             
             _set_path="settings.json"
@@ -348,7 +379,7 @@ class POST_manager():
                     sens = sens.lower()
                     newSensor = all_data["baseSensor"].copy()
                     
-                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/" + sens
+                    newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/"
                     newSensor["patientID"] = newPatient["uniqueID"]
                     newSensor["bn"] = newPatient["uniqueID"] + "/house/" + sens
                     newSensor["e"][0]["n"] = sens      

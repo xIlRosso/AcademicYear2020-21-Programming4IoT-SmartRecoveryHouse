@@ -49,16 +49,14 @@ class Publishers():
 class Subscribers:
 
 
-    def __init__(self, clientID, topic, broker, port, actuators):
+    def __init__(self, clientID, topic, broker, port):
         self.clientID=clientID
         self._paho_client=PahoMQTT.Client(self.clientID, True)
         self.topic=topic
         self.messageBroker=broker
         self._paho_client.on_connect=self.myOnConnect
-        if actuators==0:
-            self._paho_client.on_message=self.myOnMsgReceived
-        elif actuators==1:
-            self._paho_client.on_message=self.myOnMsgActuators
+        self._paho_client.on_message=self.myOnMsgReceived
+        
         self.port=port
         
     def start(self):
@@ -82,13 +80,3 @@ class Subscribers:
         json.dump(data, open('House Sensors/catalog_url.json','w'))
         print(json.dumps(data))
         
-    def myOnMsgActuators(self, paho_mqtt, userdata, msg):
-            d=json.loads(msg.payload)
-            data={
-                "Temperature" : d["T"],
-                "LuminousIntensity" : d["LI"],
-                "Humidity" : d["H"]
-            }
-            json.dump(data, open('Time_control_strategies/sens_act.json','a'))
-            print(json.dumps(data))
-            
