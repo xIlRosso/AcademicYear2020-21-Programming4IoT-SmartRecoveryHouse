@@ -93,6 +93,8 @@ class SwitchBot:
         message = msg['text']
         global flagID
         global flagFolder
+        with open("explanation_messages.json") as json_in:
+            explanations = json.load(json_in)
         
         r=requests.get(catalog_address+"/telegram_bot/pin_ids")
         pins = r.json()
@@ -146,6 +148,36 @@ class SwitchBot:
         elif message == pins["Doctor_PIN"]:
             flagID = 1
             self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
+
+        elif message == "/addSomeone":
+            buttons=[[InlineKeyboardButton(text=f'Patient', callback_data="/newPt"),
+                    InlineKeyboardButton(text=f'Doctor', callback_data="/newDc"),
+                    InlineKeyboardButton(text=f'Caretaker', callback_data="/newCt")]]
+
+            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+            self.bot.sendMessage(chat_ID, text="Select who do you want to add", reply_markup=keyboard)
+
+        elif message == "/updateField":
+            buttons=[[InlineKeyboardButton(text=f'PatientAddress', callback_data="/upPtAdd"),
+                    InlineKeyboardButton(text=f'ActuatorTresh', callback_data="/upActTresh")]]
+
+            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+            self.bot.sendMessage(chat_ID, text="Select what do you want to update", reply_markup=keyboard)
+
+        elif message == "/newPt":
+            self.bot.sendMessage(chat_ID, text = explanations["addPatient"] )
+
+        elif message == "/newDc":
+            self.bot.sendMessage(chat_ID, text = explanations["addDoctor"] )
+
+        elif message == "/newCt":
+            self.bot.sendMessage(chat_ID, text = explanations["addCaretaker"])
+
+        elif message == "/upPtAdd":
+            self.bot.sendMessage(chat_ID, text = explanations["addPatientAddress"])
+
+        elif message == "/upActTresh":
+            self.bot.sendMessage(chat_ID, text = explanations["updateActuator"])
 
         elif message == "/supported":
             self.bot.sendMessage(chat_ID, text = self.supportedFeatures())
@@ -212,6 +244,10 @@ class SwitchBot:
             self.bot.sendMessage(chat_ID, text=query_data)
         elif message == "More Options":
             self.bot.sendMessage(chat_ID, text=query_data)
+        elif message == "Select who do you want to add":
+            self.bot.sendMessage(chat_ID, text = query_data)
+        elif message == "Select what do you want to update":
+            self.bot.sendMessage(chat_ID, text = query_data)
 
 if __name__ == "__main__":
 
