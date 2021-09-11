@@ -179,6 +179,17 @@ class GET_manager(object):
                     "Weight" : data["Regr_Values"]["Weight"]
                     }
                 return json.dumps(resp)
+            
+            elif self.path[1]=="supported":
+                resp = {
+                    "actuators" : {},
+                    "sensors" : {}
+                    }
+                
+                resp["actuators"] = data["supportedActuators"]
+                resp["sensors"] = data["supportedSensors"]
+                
+                return json.dumps(resp)
                 
         elif self.path[0]=='thingspeak':
             _set_path="settings.json"
@@ -351,7 +362,8 @@ class POST_manager():
                     
                     newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/" + actuator
                     newActuator["patientID"] = newPatient["uniqueID"]
-                    newActuator["name"] = all_data["supportedSensors"][actuator]
+                    newActuator["unit"] = all_data["supportedActuators"][actuator]
+                    newActuator["name"] = actuator
                     newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"Low"]) 
                     newActuator["tresholds"].append(all_data["defaultActuatorValues"][actuator+"High"])
                     

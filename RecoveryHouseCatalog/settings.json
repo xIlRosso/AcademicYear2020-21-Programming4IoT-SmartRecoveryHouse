@@ -14,7 +14,8 @@
     "baseDoctor" : {
         "name" : "",
         "age" : "",
-        "patientsAssigned" : []
+        "patientsAssigned" : [],
+        "pin" : ""
     },
     "basePatient": 
          {
@@ -46,6 +47,7 @@
     "baseActuator" : {
         "topic" : "",
         "patientID" : "",
+        "unit" : "",
         "name" : "",
         "tresholds" : [],
         "state" : "" 
@@ -66,6 +68,12 @@
         "humidity" : "%",
         "weight" : "kg",
         "heartrate" : "bpm"
+    },
+    "supportedActuators": {
+        "temperature" : "C",
+        "lumen" : "lm",
+        "humidity" : "%",
+        "time" : "s"
     }
     "devicesList": [
         {

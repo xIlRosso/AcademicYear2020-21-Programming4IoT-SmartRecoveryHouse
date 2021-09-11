@@ -76,6 +76,17 @@ class SwitchBot:
 
         return tmp_var, val_field
 
+    def supportedFeatures(self) -> str:
+        r=requests.get(catalog_address+"/telegram_bot/supported")
+        dicts = r.json()
+        ansSupported = ""
+        for key in dicts:
+            ansSupported += key + ": "
+            for keys in key:
+                ansSupported+= keys + ", "
+            ansSupported += ". "
+        
+        return ansSupported
 
     def on_chat_message(self, msg):
         content_type, chat_type, chat_ID = telepot.glance(msg)
@@ -135,6 +146,9 @@ class SwitchBot:
         elif message == pins["Doctor_PIN"]:
             flagID = 1
             self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
+
+        elif message == "/supported":
+            self.bot.sendMessage(chat_ID, text = self.supportedFeatures())
 
         elif name_field == '/addPatient':
             pObj = tm.PatientClass.Patient()
