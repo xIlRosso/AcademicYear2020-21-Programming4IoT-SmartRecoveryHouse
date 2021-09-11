@@ -158,11 +158,10 @@ class SwitchBot:
 
 if __name__ == "__main__":
 
-    S=Subscribers("Beacon_Capture1234", 
-    "programming_for_iot/aa2021/SmartRecoveryHouse/catalog_public_address",
-    "broker.hivemq.com",
-    1883, 0
-    )
+    with open("catalog_mqtt_settings.json","r") as json_in:
+        setsCatalog = json.load(json_in)
+
+    S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
     i=0
     while i<10:
         S.start()
