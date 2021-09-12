@@ -58,7 +58,7 @@ class Publishers():
 class Subscribers:
 
 
-    def __init__(self, clientID, topic, broker, port, actuators):
+    def __init__(self, clientID, topic, broker, port):
         self.clientID=clientID
         self._paho_client=PahoMQTT.Client(self.clientID, True)
         self.topic=topic

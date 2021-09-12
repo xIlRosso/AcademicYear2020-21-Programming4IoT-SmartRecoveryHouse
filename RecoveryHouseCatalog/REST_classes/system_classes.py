@@ -94,7 +94,7 @@ class GET_manager(object):
                         resp["houses"].append({"houseDevices" : patient["houseDevices"], "actList" : patient["actuatorsList"]})
                         
                     
-                    return json.dumps(resp)
+                return json.dumps(resp)
 
         if self.path[0]=='sensor':
             

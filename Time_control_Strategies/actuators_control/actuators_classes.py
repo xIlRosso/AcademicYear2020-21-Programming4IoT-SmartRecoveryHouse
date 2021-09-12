@@ -2,9 +2,45 @@ import json
 import requests
 import time
 import numpy as np
+import paho.mqtt.client as PahoMQTT
+
+
+class Subscribers:
+
+
+    def __init__(self, clientID, topic, broker, port):
+        self.clientID=clientID
+        self._paho_client=PahoMQTT.Client(self.clientID, True)
+        self.topic=topic
+        self.messageBroker=broker
+        self._paho_client.on_connect=self.myOnConnect
+        
+        self._paho_client.on_message=self.myOnMsgReceived
+        
+        self.port=port
+        
+    def start(self):
+        self._paho_client.connect(self.messageBroker)
+        self._paho_client.loop_start()
+        self._paho_client.subscribe(self.topic, 2)
+        
+    def stop(self):
+        self._paho_client.unsubscribe(self.topic)
+        self._paho_client.loop_stop()
+        self._paho_client.disconnect()
+        
+    def myOnConnect(self, paho_mqtt, userdata, flags, rc):
+        print("Connection successful to "+self.messageBroker+" with result code: "+str(rc))
+        
+    def myOnMsgReceived(self, paho_mqtt, userdata, msg):
+        data=json.loads(msg.payload)
+        json.dump(data, open('Time_control_strategies/sens_act.json','w'))
+        print(json.dumps(data))
+
+
 
 class Actuators:
-    def __init__(self, data):
+    def __init__(self, data = 0):
         self.types = [] #put the keys here
         self.tresholds = data
 
@@ -27,7 +63,9 @@ class Actuators:
 
         return state
 
+    def run_sub(self, topic, broker, port) -> None:
+        c = Subscribers("ClientSomething"+topic, topic, broker, port)
+        c.start()
+        time.sleep(4)
+        c.stop()
 
-
-    def sensor_based_actuations(self, idn):
-        pass

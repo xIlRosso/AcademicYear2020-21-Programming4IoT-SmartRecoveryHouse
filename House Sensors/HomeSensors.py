@@ -7,30 +7,6 @@ import random
 from mqtt_methods.mqtt_methods import Subscribers, Publishers
 
 
-
-def myComment (temp, luminousIntensity, humidity):
-    msg = ""
-    if temp > 25:
-        msg = msg + "Warning! temp is high, "
-    if temp < 19:
-        msg = msg +  "Warning! temp is low, "
-    
-    if luminousIntensity > 600:
-        msg = msg +  "light is high, "
-    if luminousIntensity < 400:
-        msg = msg +  "light is low, "
-        
-    if humidity > 50:
-        msg = msg +  "humidity is high, "
-    if humidity < 30:
-        msg = msg +  "humidity is low, " 
-    
-    if msg == "":
-        return "all parameters are ok"
-    else:
-        return msg
-
-
 def definePaho(clientID):
     return  PahoMQTT.Client(clientID)
 
@@ -111,107 +87,10 @@ if __name__ == "__main__":
 
             myClient.publish(sensor["topic"], payload = json.dumps(msgToPub))
             stopConnection(myClient, sensor["topic"])
-
+            print(json.dumps(msgToPub))
             print("Computing and publishing the next house")
 
 
         time.sleep(1)
-
-
-
-
-
-    # # conf = json.load(open("settings.json"))
-    # r = requests.get(catalog_address+"/sensor/housedev")
-    # conf = r.json()
-    # myValues = conf
-    # broker = conf["broker"]
-    # port = conf["port"]
-    # msg = conf["devicesList"][0]
-    # topics = conf["Topics_List"]
-
-    # myClient = definePaho("myTestClinet")
-
-    # startConnection (myClient, broker, port)
-
-    # print("Start Connection")
-
-    # senml_format={
-    #     "devicesList" : [
-    #         {
-    #             "bn" : "",
-    #             "e" : [
-    #                 {
-    #                     "n" : "",
-    #                     "u" : "",
-    #                     "t" : 0,
-    #                     "v" : 0
-    #                 }
-    #             ]
-    #         }
-    #     ]
-    # }
-
-
-    # values = {
-    #         "Temperature" : 0,
-    #         "LuminousIntensity" : 0,
-    #         "Humidity" : 0
-    #     }   
-
-    # for j in range(200):  
-        
-    #     result = {}
-    #     sensorUnits = {}
-
-    #     sensorNum = len(conf["devicesList"])
-        
-
-    #     for i in range(0,sensorNum):
-    #         resp=senml_format.copy()
-    #         topic = topics[i]
-    #         normalSensorValue = conf["devicesList"][i]["e"][0]["v"]
-    #         varianceSensorValue = conf["devicesList"][i]["e"][0]["std"]
-    #         resp["devicesList"][0]["e"][0]["v"] = np.random.normal(normalSensorValue,varianceSensorValue)
-    #         #conf["devicesList"][i]["e"][0]["v"] = normalSensorValue
-    #         resp["devicesList"][0]["e"][0]["u"] = conf["devicesList"][i]["e"][0]["u"]
-    #         resp["devicesList"][0]["e"][0]["n"] =  conf["devicesList"][i]["e"][0]["n"]
-    #         resp["devicesList"][0]["e"][0]["t"] = time.time()
-    
-            
-    #         myClient.publish(topic, payload = json.dumps(resp))
-    #         print("Publishing: "+json.dumps(resp))
-    #         time.sleep(1)
-    #         values[resp["devicesList"][0]["e"][0]["n"]] = resp["devicesList"][0]["e"][0]["v"]
-        
-
-        
-    #     requests.post(catalog_address+"/last_house_meas", json=values)
-
-
-        
-    #     # myPayLoad = ""
-    #     # for k in result:
-    #     #     myPayLoad = myPayLoad + k + "= " + str(result[k]) + " " + str(sensorUnits[k]) + " and "
-        
-    #     # myPayLoad = myPayLoad[:len(myPayLoad) - 5]
-    #     # myPayLoad = myPayLoad + ". So: " + myComment(result["Temperature"], result["LuminousIntensity"], result["Humidity"])
-
-    #     # print(myPayLoad)
-        
-    #     # myClient.publish(topic, payload = myPayLoad , qos=2, retain= True)
-
-
-    #     # outPutJsonName = 'myValuesJson_' + str(j+1) + '.json'
-        
-    #     # # with open(outPutJsonName, 'w') as outfile:
-    #     # #     json.dump(myValues, outfile)
-                        
-    # stopConnection(myClient, topic)
-
-    # print("Close Connection")
-
-
-
 
 

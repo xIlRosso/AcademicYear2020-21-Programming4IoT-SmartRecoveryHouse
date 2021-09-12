@@ -10,6 +10,7 @@ import requests
 import time
 import numpy as np
 import paho.mqtt.client as PahoMQTT
+import os.path
 from time_shift.time_shift_classes import TimeShift
 from actuators_control.actuators_classes import Actuators
 from mqtt_methods.mqtt_methods import Publishers, Subscribers    
@@ -77,8 +78,10 @@ if __name__=='__main__':
     i=0
     while i<1000:
         #get actuators and topic info values
-        f = requests.get(catalog_address+"controls/values")
+        f = requests.get(catalog_address+"/controls/house_list")
         houses = f.json()
+        print(houses)
+        houses = houses["houses"]
 
         for house in houses:
             #here startup the publisher per house
@@ -86,7 +89,7 @@ if __name__=='__main__':
             startConnection(myClient, conf["broker"], conf["port"])
             msgToPub = []
 
-            for actuator in house:
+            for actuator in house["actList"]:
                 if actuator["name"] == "time":
                     tObj = TimeShift(actuator["tresholds"])
                     actuator["state"] = tObj.run()
@@ -96,84 +99,25 @@ if __name__=='__main__':
                         for device in house["houseDevices"]:
                             if device["e"][0]["n"] == actuator["name"]:
                                 #we need to subscribe for the values of the sensors
-                                val = 0
-                                #then use the tresholds and check for on/off
-                                sObj = Actuators(actuator["tresholds"])
-                                actuator["state"] = sObj.run(val)#put the value in run
-                                msgToPub.append(actuator)
+                                s2Obj = Actuators()
+                                s2Obj.run_sub(device["topic"], conf["broker"], conf["port"])
+                                
+                                if os.path.isfile("Time_Control_strategies/sens_act.json"):
+                                    with open("Time_Control_strategies/sens_act.json") as json_in:
+                                        val_tmp = json.load(json_in)
+                                    for sensor in val_tmp:
+                                        if sensor["e"][0]["n"]==actuator["name"]:
+                                            val = sensor["e"][0]["v"]
+
+                                    #then use the tresholds and check for on/off
+                                    sObj = Actuators(actuator["tresholds"])
+                                    actuator["state"] = sObj.run(val)#put the value in run
+                                    msgToPub.append(actuator)
 
             myClient.publish(actuator["topic"], payload = json.dumps(msgToPub))
+            print(json.dumps(msgToPub))
             stopConnection(myClient, actuator["topic"])
-
-
-
-
-
-
-    f = requests.get(catalog_address+"/timecontr/sensoract")
-    conf2 = f.json()
-    print(conf2)
-
-    broker2=conf2['broker']
-    port2=conf2['port']
-    topics2=conf2['Topics_List']
-    sens_tosub=conf2['sensors_to_sub_time_contr']
-    tresholds=conf2['treshold_actuators']
-
-
-    
-    A=Actuators(tresholds)
-    values={
-        "Act1": 0,
-        "Act2": 0,
-        "Lights": 0,
-        "Heating": 0,
-        "Humidifier": 0
-    }
-
-
-    t=0
-    while t<300:
-        # resp=C.time_controlled_actuations()
-        p=Publishers()
-        # p.run(resp, broker, port, topics)
-        time.sleep(1)
-        t+=1
-
-        keyz=A.get_keys()
-        m=0
-        As=[]
-        for s in sens_tosub:
-            As.append(Subscribers("Actuators"+keyz[m], 
-                s,
-                broker2,
-                port2, 1))
-            m+=1
-        fg=0
-        for actuator in As:
-            actuator.start()
-            time.sleep(5)
-            actuator.stop()
-            t+=5
-
-            resp2=A.sensor_based_actuations(fg)
-
-            p.run_act(resp2, broker2, port2, topics2)
-            fg+=1
-
-        # values["Act1"]=resp["0"]
-        # values["Act2"]=resp["1"]
-        values["Heating"]=resp2["heating"]
-        values["Humidifier"]=resp2["humidifier"]
-        values["Lights"]=resp2["lights"]
-
-        requests.post(catalog_address+"/last_act_status", json=values)
-
-
-
-        
-        
-
+            msgToPub.clear()
 
                
 
