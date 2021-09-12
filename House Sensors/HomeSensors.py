@@ -97,11 +97,11 @@ if __name__ == "__main__":
     i=0
 
     while i<1000:
-        r = requests.get(catalog_address+"/sensors/house_list") # get the list of houses
-        houses = r.json()
+        f = requests.get(catalog_address+"/sensors/house_list") # get the list of houses
+        houses = f.json()
 
         for house in houses:
-            myClient = definePaho("myTestClient"+str(i))
+            myClient = definePaho("myHouseClient"+str(i))
             startConnection (myClient, conf["broker"], conf["port"])
             msgToPub=[]
             for sensor in house:

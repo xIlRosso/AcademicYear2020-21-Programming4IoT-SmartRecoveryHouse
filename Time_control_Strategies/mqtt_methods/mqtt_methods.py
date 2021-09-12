@@ -64,10 +64,9 @@ class Subscribers:
         self.topic=topic
         self.messageBroker=broker
         self._paho_client.on_connect=self.myOnConnect
-        if actuators==0:
-            self._paho_client.on_message=self.myOnMsgReceived
-        elif actuators==1:
-            self._paho_client.on_message=self.myOnMsgActuators
+        
+        self._paho_client.on_message=self.myOnMsgReceived
+        
         self.port=port
         
     def start(self):
@@ -91,19 +90,3 @@ class Subscribers:
         json.dump(data, open('Time_control_strategies/catalog_url.json','w'))
         print(json.dumps(data))
         
-    def myOnMsgActuators(self, paho_mqtt, userdata, msg):
-            d=json.loads(msg.payload)
-            data={
-                "Temperature" : d["T"],
-                "LuminousIntensity" : d["LI"],
-                "Humidity" : d["H"]
-            }
-            json.dump(data, open('Time_control_strategies/sens_act.json','a'))
-            print(json.dumps(data))
-
-    def myOnMsgActuators(self, paho_mqtt, userdata, msg):
-            d=json.loads(msg.payload)
-            
-            json.dump(d, open('Time_control_strategies/sens_act.json','w'), indent=4)
-            print(json.dumps(d))
-            

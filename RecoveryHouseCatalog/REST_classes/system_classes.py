@@ -36,10 +36,11 @@ class GET_manager(object):
             if self.path[1]=='house_list':
                 resp = []
                 
-                for patient in data["patientsList"]:
-                    resp.append(patient["houseDevices"])
+                if data["patientsList"]!=[]:
+                    for patient in data["patientsList"]:
+                        resp.append(patient["houseDevices"])
                     
-                return json.dumps(resp)
+                    return json.dumps(resp)
                 #we need to get all the sensors from all the houses, publish on house-based topics
                 
 
@@ -67,6 +68,33 @@ class GET_manager(object):
                     
                 return json.dumps(resp)
 
+
+        elif self.path[0] == 'controls':
+            _set_path="settings.json"
+            with open(_set_path) as json_file:
+                data=json.load(json_file)
+                
+            if self.path[1] == 'settings':
+                
+                resp = {
+                    "broker" : data["broker"],
+                    "port" : data["port"]
+                    }
+                
+                return json.dumps(resp)
+            
+            elif self.path[1] == 'house_list':
+                
+                resp={
+                    "houses" : []
+                    }
+                
+                if data["patientsList"]!=[]:
+                    for patient in data["patientsList"]:
+                        resp["houses"].append({"houseDevices" : patient["houseDevices"], "actList" : patient["actuatorsList"]})
+                        
+                    
+                    return json.dumps(resp)
 
         if self.path[0]=='sensor':
             
