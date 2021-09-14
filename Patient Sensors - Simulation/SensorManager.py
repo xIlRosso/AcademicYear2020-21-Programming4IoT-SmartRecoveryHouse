@@ -1,11 +1,36 @@
-from Sens_Temp import *
-from Sens_Weight import *
-from Sens_HR_OS import *
+from MyMQTT import *
 from Curves import *
 from mqtt_methods.mqtt_methods import Subscribers
-import json
-import requests
-import time
+import json, requests, time, os
+
+class myPublisher():
+    def __init__(self, clientID, topic, broker, port, msg):
+        self.client = MyMQTT(clientID, broker, port, self)
+        self.name = clientID
+        self.topic = topic
+        self.status = None
+        self.__message = msg
+
+    def start(self):
+        self.client.start()
+
+    def stop(self):
+        self.client.stop()
+
+    def publish(self, value):
+        message = self.__message
+        message["e"][0]["v"] = value
+        message["e"][0]["t"] = str(time.time())
+        self.client.myPublish(self.topic, message)
+
+        if(os.path.isfile(self.name+".json")):
+            json_log = json.load(open(self.name+".json", "r"))
+        else:
+            json_log = {"bn" : message["bn"],"e" : []}
+
+        json_log["e"].append(message["e"])                        
+        #json_log[payload["bn"]].append(payload["e"])
+        json.dump(json_log, open(self.name+".json", "w"),indent=4)
 
 if __name__ == '__main__':
     
@@ -26,11 +51,114 @@ if __name__ == '__main__':
         dat=json.load(json_in)
         catalog_address=dat["url_catalog"]
 
-    r = requests.get(catalog_address+"/sensor/patient")
+    r = requests.get(catalog_address+"/sensors/patient")
 
     conf = r.json()
 
-    r = requests.get(catalog_address+"/telegram_bot/simulation_values")
+    i=0
+
+    while i<1000:
+        f = requests.get(catalog_address+"/sensors/bodydevices_list") # get the list of houses
+        devs = f.json()
+
+        sim_t = []
+        sim_w = []
+        sim_hr = []
+        for sensors in devs:
+            
+            for sensor in sensors:
+                r = requests.get(catalog_address+"/sensors/sim_values/"+sensor["patientID"])
+                conf_simt = r.json()
+                conf_sim = conf_simt["Sim_settings"]  
+
+                if sensor["e"][0]["n"]=="temperature":
+                    sim_t = Simulation(sensor["Thresholds"]["temperatureLow"],sensor["Thresholds"]["temperatureHigh"])
+                    if conf_sim["Temp_sim"] == "r":
+                        c = conf_sim["Temp_status"]
+                        sim_t.Norm_Temp(c)
+                    elif conf_sim["Temp_sim"] == "l":
+                        sim_t.Low_Temp()
+                    elif conf_sim["Temp_sim"] == "h":
+                        sim_t.High_Temp()
+                elif sensor["e"][0]["n"]=="weight":
+                    sim_w = Simulation(sensor["Thresholds"]["weightLow"],sensor["Thresholds"]["weightHigh"])
+                    if conf_sim["Weight_sim"] == "r":
+                        sim_w.Norm_Weig()
+                    elif conf_sim["Weight_sim"] == "l":
+                        sim_w.Low_Weig()    
+                    elif conf_sim["Weight_sim"] == "h":
+                        sim_w.High_Weig()
+                elif sensor["e"][0]["n"]=="heartrate":
+                    sim_hr = Simulation(sensor["Thresholds"]["heartrateLow"],sensor["Thresholds"]["heartrateHigh"])            
+                    if conf_sim["HR_sim"] == "r":
+                        sim_hr.Rest_HR()
+                    elif conf_sim["HR_sim"] == "l":
+                        c = conf_sim["HR_status"]
+                        sim_hr.Low_HR(c)    
+                    elif conf_sim["HR_sim"] == "h":
+                        c = conf_sim["HR_status"]
+                        sim_hr.High_HR(c)
+
+                myPubl = myPublisher("SRH_body"+sensor["e"][0]["n"]+str(i), sensor["topic"], conf["broker"], conf["port"],sensor)    
+                myPubl.start()
+               
+
+                if sensor["e"][0]["n"]=="temperature":
+                    myPubl.publish(sim_t.sf[sensor["timesVisited"]])
+                    sensor["timesVisited"]+=1
+                    if sensor["timesVisited"]==len(sim_t.sf):
+                        sensor["timesVisited"]=0
+                    
+                elif sensor["e"][0]["n"]=="weight":
+                    myPubl.publish(sim_w.sf[sensor["timesVisited"]])
+                    sensor["timesVisited"]+=1
+                    if sensor["timesVisited"]==len(sim_w.sf):
+                        sensor["timesVisited"]=0
+
+                elif sensor["e"][0]["n"]=="heartrate":
+                    myPubl.publish(sim_hr.sf[sensor["timesVisited"]])
+                    sensor["timesVisited"]+=1
+                    if sensor["timesVisited"]==len(sim_hr.sf):
+                        sensor["timesVisited"]=0
+
+                time.sleep(20)
+                #do a put request to update the timesVisited value
+
+                times_dict = {
+                    "timesVisited" : sensor["timesVisited"]
+                }
+
+                requests.put(catalog_address + "/sensors/updateTimeVisited/"+sensor["patientID"]+"/"+sensor["e"][0]["n"], json = times_dict)
+
+                # print(sim_t.sf)
+
+                # for y in zip(sim_t.sf):
+
+                #     print (y)
+
+                #     hP = requests.get(catalog_address + "/sensors/highlightedPatient")
+                #     hp = hP.json()
+
+                #     if sensor["patientID"] != hp:
+                #         break
+
+                #     if sensor["e"][0]["n"]=="temperature":
+                #         myPubl.publish(y)
+                #         time.sleep(20)
+                    # elif sensor["e"][0]["n"]=="weight":
+                    #     myPubl.publish(x)
+                    #     time.sleep(20)
+                    # elif sensor["e"][0]["n"]=="heartrate":
+                    #     myPubl.publish(z)
+                    #     time.sleep(20)
+                    
+                myPubl.stop()    
+                print("Computing and publishing the next body sensor")
+
+
+        time.sleep(1)
+
+"""     r = requests.get(catalog_address+"/telegram_bot/simulation_values")
 
     conf_sim = r.json()
     # temperature
@@ -191,4 +319,4 @@ if __name__ == '__main__':
 
     myPubl_temp.stop()
     myPubl_weight.stop()
-    myPubl_HR.stop()
+    myPubl_HR.stop() """

@@ -33,7 +33,7 @@ class GET_manager(object):
                 return json.dumps(resp)
                 
                 
-            if self.path[1]=='house_list':
+            elif self.path[1]=='house_list':
                 resp = []
                 
                 if data["patientsList"]!=[]:
@@ -43,7 +43,47 @@ class GET_manager(object):
                     return json.dumps(resp)
                 #we need to get all the sensors from all the houses, publish on house-based topics
                 
-
+            elif self.path[1]=='bodydevices_list':
+                resp = []
+                
+                if data["patientsList"]!=[]:
+                    for patient in data["patientsList"]:
+                        resp.append(patient["bodyDevices"])
+                    
+                    return json.dumps(resp)
+                #we need to get all the sensors from all the houses, publish on house-based topics
+                
+            elif self.path[1]=='sim_values':
+                
+                resp = {}
+                uniqueID = self.path[2]
+                
+                if data["patientsList"] != []:
+                    for patient in data["patientsList"]:
+                        if patient["uniqueID"] == uniqueID:
+                            resp = patient["bodySensorsSimulation"]
+                
+                return json.dumps(resp)
+              
+                
+            elif self.path[1]=='highlightedPatient':
+                
+                
+                resp = data["highlightedPatient"]
+                
+                return json.dumps(resp)
+            
+            
+            elif self.path[1]=='patient':
+                
+                resp = {
+                    "broker" : data["broker"],
+                    "port" : data["port"],
+                    }
+                
+                return json.dumps(resp)
+            
+            
         elif self.path[0] == 'telegram':
             _set_path="settings.json"
             with open(_set_path) as json_file:
@@ -95,6 +135,12 @@ class GET_manager(object):
                         
                     
                 return json.dumps(resp)
+
+
+
+
+
+
 
         if self.path[0]=='sensor':
             
@@ -401,6 +447,8 @@ class POST_manager():
             
             json.dump(smt, open(_set_path,'w'), indent=4)
             
+            
+            
         elif self.path[0]=="telegram":
             _set_path="settings.json"   
             with open(_set_path) as json_in:
@@ -419,11 +467,17 @@ class POST_manager():
                     newPatient["age"] = data["age"]
                     newPatient["uniqueID"] = data["uniqueID"]
                     newPatient["disease"] = data["disease"]
+                    newPatient["bodySensorsSimulation"] = all_data["defaultSimValues"]
+                    if all_data["highlightedPatient"] == "":
+                        all_data["highlightedPatient"] = newPatient["uniqueID"]
                     
                     for sens in data["bodySensors"]:
                         sens = sens.lower()
                         newSensor = copy.deepcopy(all_data["baseSensor"])
                         
+                        tresh = {sens+"Low" : all_data["defaultThreshValues"][sens+"Low"], sens+"High" : all_data["defaultThreshValues"][sens+"High"]}
+                        
+                        newSensor["Thresholds"] = tresh
                         newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" 
                         newSensor["patientID"] = newPatient["uniqueID"]
                         newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
@@ -562,6 +616,23 @@ class PUT_manager():
                             
                     json.dump(all_data, open(_set_path,"w"), indent = 4)
             
+            
+        elif self.path[0] == "sensors":
+            if self.path[1] == "updateTimeVisited":
+                
+                uniqueID = self.path[2]
+                sens_name = self.path[3]
+                
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["bodyDevices"] != []:
+                            for device in patient["bodyDevices"]:
+                                if uniqueID == device["patientID"]:
+                                    if device["e"][0]["n"] == sens_name:
+                                        device["timesVisited"] = data["timesVisited"]
+                                    
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+            
                 
 class DELETE_manager():
     def __init__(self, path):
@@ -583,7 +654,25 @@ class DELETE_manager():
                             
                         i+=1
                         
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                if all_data["doctorsList"] != []:
+                    i = 0
+                    for doctor in all_data["doctorsList"]:
+                        for patient_assigned in doctor["patientsAssigned"]:
+                            if patient_assigned["uniqueID"] == uniqueID:
+                                all_data["doctorsList"]["patientsAssigned"].pop(i)
+                                
+                            i+=1
+                            
+                            
+                if all_data["caretakersList"] != []:
+                    i = 0
+                    for caretaker in all_data["caretakersList"]:
+                        if caretaker["patientAssigned"] == uniqueID:
+                            all_data["caretakersList"]["patientAssigned"] = ""
+                            
+                        i+=1
+                        
+                json.dump(all_data, open(_set_path,"w"), indent = 4)
                 
             
             elif self.path[1]=="deleteDoctor":

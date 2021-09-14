@@ -3,12 +3,14 @@
     "broker": "broker.hivemq.com",
     "port": 1883,
     "baseTopic": "programming_for_iot/aa2021/SmartRecoveryHouse",
+    "highlightedPatient": "example@domain.com",
     "patientsList": [
         {
-            "name": "Aelxandru",
-            "age": 22,
+            "name": "George_Washington",
+            "age": 54,
+            "weight": "",
             "uniqueID": "example@domain.com",
-            "pin": "pppp4444",
+            "pin": "",
             "disease": "ckd",
             "bodySensors": [],
             "houseSensors": [],
@@ -18,6 +20,11 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
                     "patientID": "example@domain.com",
+                    "Thresholds": {
+                        "temperatureLow": 36.5,
+                        "temperatureHigh": 37.5
+                    },
+                    "timesVisited": 2,
                     "bn": "example@domain.com/body/temperature",
                     "e": [
                         {
@@ -31,11 +38,16 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
                     "patientID": "example@domain.com",
-                    "bn": "example@domain.com/body/weight",
+                    "Thresholds": {
+                        "heartrateLow": 60,
+                        "heartrateHigh": 75
+                    },
+                    "timesVisited": 2,
+                    "bn": "example@domain.com/body/heartrate",
                     "e": [
                         {
-                            "n": "weight",
-                            "u": "kg",
+                            "n": "heartrate",
+                            "u": "bpm",
                             "t": "",
                             "v": 0
                         }
@@ -44,11 +56,16 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/body/",
                     "patientID": "example@domain.com",
-                    "bn": "example@domain.com/body/heartrate",
+                    "Thresholds": {
+                        "weightLow": 65.5,
+                        "weightHigh": 70
+                    },
+                    "timesVisited": 1,
+                    "bn": "example@domain.com/body/weight",
                     "e": [
                         {
-                            "n": "heartrate",
-                            "u": "bpm",
+                            "n": "weight",
+                            "u": "kg",
                             "t": "",
                             "v": 0
                         }
@@ -59,6 +76,8 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
                     "patientID": "example@domain.com",
+                    "Thresholds": {},
+                    "timesVisited": 0,
                     "bn": "example@domain.com/house/temperature",
                     "e": [
                         {
@@ -72,6 +91,8 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
                     "patientID": "example@domain.com",
+                    "Thresholds": {},
+                    "timesVisited": 0,
                     "bn": "example@domain.com/house/humidity",
                     "e": [
                         {
@@ -85,6 +106,8 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/house/",
                     "patientID": "example@domain.com",
+                    "Thresholds": {},
+                    "timesVisited": 0,
                     "bn": "example@domain.com/house/lumen",
                     "e": [
                         {
@@ -100,123 +123,6 @@
                 {
                     "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/actuator/",
                     "patientID": "example@domain.com",
-                    "unit": "s",
-                    "name": "time",
-                    "tresholds": [
-                        "06:00:00",
-                        "20:00:00"
-                    ],
-                    "state": ""
-                }
-            ]
-        },
-        {
-            "name": "George_Washington",
-            "age": 54,
-            "uniqueID": "george@washington.com",
-            "pin": "",
-            "disease": "diabetes",
-            "bodySensors": [],
-            "houseSensors": [],
-            "controlledActuators": [],
-            "address": "",
-            "bodyDevices": [
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/body/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/body/temperature",
-                    "e": [
-                        {
-                            "n": "temperature",
-                            "u": "C",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/body/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/body/weight",
-                    "e": [
-                        {
-                            "n": "weight",
-                            "u": "kg",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/body/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/body/heartrate",
-                    "e": [
-                        {
-                            "n": "heartrate",
-                            "u": "bpm",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                }
-            ],
-            "houseDevices": [
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/house/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/house/temperature",
-                    "e": [
-                        {
-                            "n": "temperature",
-                            "u": "C",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/house/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/house/lumen",
-                    "e": [
-                        {
-                            "n": "lumen",
-                            "u": "lm",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/house/",
-                    "patientID": "george@washington.com",
-                    "bn": "george@washington.com/house/humidity",
-                    "e": [
-                        {
-                            "n": "humidity",
-                            "u": "%",
-                            "t": "",
-                            "v": 0
-                        }
-                    ]
-                }
-            ],
-            "actuatorsList": [
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/actuator/",
-                    "patientID": "george@washington.com",
-                    "unit": "C",
-                    "name": "temperature",
-                    "tresholds": [
-                        19,
-                        21
-                    ],
-                    "state": ""
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/actuator/",
-                    "patientID": "george@washington.com",
                     "unit": "lm",
                     "name": "lumen",
                     "tresholds": [
@@ -226,8 +132,19 @@
                     "state": ""
                 },
                 {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/actuator/",
-                    "patientID": "george@washington.com",
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/actuator/",
+                    "patientID": "example@domain.com",
+                    "unit": "C",
+                    "name": "temperature",
+                    "tresholds": [
+                        19,
+                        21
+                    ],
+                    "state": ""
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/example@domain.com/actuator/",
+                    "patientID": "example@domain.com",
                     "unit": "%",
                     "name": "humidity",
                     "tresholds": [
@@ -235,28 +152,24 @@
                         50
                     ],
                     "state": ""
-                },
-                {
-                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/george@washington.com/actuator/",
-                    "patientID": "george@washington.com",
-                    "unit": "s",
-                    "name": "time",
-                    "tresholds": [
-                        "06:00:00",
-                        "20:00:00"
-                    ],
-                    "state": ""
                 }
-            ]
+            ],
+            "bodySensorsSimulation": {
+                "Sim_settings": {
+                    "Temp_sim": "r",
+                    "Weight_sim": "r",
+                    "HR_sim": "r",
+                    "Temp_status": "n",
+                    "HR_status": "n"
+                }
+            }
         }
     ],
     "doctorsList": [
         {
             "name": "Alex",
             "age": 29,
-            "patientsAssigned": [
-                "example@domain.com"
-            ],
+            "patientsAssigned": [],
             "pin": "12345678",
             "uniqueID": "unique1@domain.com"
         }
@@ -279,6 +192,7 @@
     "basePatient": {
         "name": "",
         "age": "",
+        "weight": "",
         "uniqueID": "",
         "pin": "",
         "disease": "",
@@ -288,11 +202,14 @@
         "address": "",
         "bodyDevices": [],
         "houseDevices": [],
-        "actuatorsList": []
+        "actuatorsList": [],
+        "bodySensorsSimulation": {}
     },
     "baseSensor": {
         "topic": "",
         "patientID": "",
+        "Thresholds": {},
+        "timesVisited": 0,
         "bn": "",
         "e": [
             {
@@ -320,6 +237,23 @@
         "humidityHigh": 50,
         "timeLow": "06:00:00",
         "timeHigh": "20:00:00"
+    },
+    "defaultThreshValues": {
+        "temperatureLow": 36.5,
+        "temperatureHigh": 37.5,
+        "weightLow": 65.5,
+        "weightHigh": 70,
+        "heartrateLow": 60,
+        "heartrateHigh": 75
+    },
+    "defaultSimValues": {
+        "Sim_settings": {
+            "Temp_sim": "r",
+            "Weight_sim": "r",
+            "HR_sim": "r",
+            "Temp_status": "n",
+            "HR_status": "n"
+        }
     },
     "supportedSensors": {
         "temperature": "C",

@@ -227,43 +227,51 @@ class SwitchBot:
             frame = pObj.createFrame()
             pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
             self.bot.sendMessage(chat_ID, text = json.dumps(frame))
+            frame = 0
 
         elif name_field == '/addPatientAddress':
             pObj = Patient()
             frame = pObj.addAddress(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateAddress", frame) #put request
+            frame = 0
 
         elif name_field == '/addDoctor':
             dObj = Doctor()
             dObj.buildAttributes(val_field)
             frame = dObj.createFrame()
             dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
+            frame = 0
 
         elif name_field == '/addCaretaker':
             cObj = Caretaker()
             cObj.buildAttributes(val_field)
             frame = cObj.createFrame()
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
+            frame = 0
 
         elif name_field == '/updateActuator':
             pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateActuator", frame) #put request
+            frame = 0
 
         elif name_field == '/patientPinRegistration':
             pObj = Patient()
             frame = pObj.registerAccount(val_field)
             pObj.updateFrame(catalog_address + "/telegram/registerPatient", frame)
+            frame = 0
 
         elif name_field == '/doctorPinRegistration':
             dObj = Doctor()
             frame = dObj.registerAccount(val_field)
             dObj.updateFrame(catalog_address + "/telegram/registerDoctor", frame)
+            frame = 0
 
         elif name_field == '/caretakerPinRegistration':
             cObj = Caretaker()
             frame = cObj.registerAccount(val_field)
             cObj.updateFrame(catalog_address + "/telegram/registerCaretaker", frame)
+            frame = 0
 
         elif name_field == '/deletePatient':
             if logged["Doctor"]:
