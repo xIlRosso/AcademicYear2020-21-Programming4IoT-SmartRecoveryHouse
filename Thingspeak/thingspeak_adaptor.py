@@ -113,9 +113,9 @@ if __name__ == "__main__":
 
         #here get the unique id key: uniqueID
         
-        r = requests.get(catalog_address+"/thingspeak/highlighted")
+        r = requests.get(catalog_address+"/thingspeak/highlightedPatient")
         unIDt = r.json()
-        unID = unIDt["uniqueID"]
+        unID = unIDt["patientID"]
 
         if unID != oldID: 
             clear_thingspeak(conf["clearURL"])
@@ -126,13 +126,13 @@ if __name__ == "__main__":
 
         r = requests.get(catalog_address+"/thingspeak/highlighted/"+unID)
         topic_sens_t = r.json()
-        topic_sens = topic_sens["topicsNeeded"]
+
         #here get the topic to subscribe to the highlighted patient
 
-        mySub = mySubscriber("AlexSubs920318_client1", topic_sens, broker, port, conf["field"], conf["url"], conf["key"])
+        mySub = mySubscriber("AlexSubs920318_client1", topic_sens_t, broker, port, conf["field"], conf["url"], conf["key"])
 
         mySub.start()
-        time.sleep(30)
+        time.sleep(25)
         mySub.stop()
         oldID = unID
        

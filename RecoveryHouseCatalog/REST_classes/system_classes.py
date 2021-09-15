@@ -64,14 +64,6 @@ class GET_manager(object):
                             resp = patient["bodySensorsSimulation"]
                 
                 return json.dumps(resp)
-              
-                
-            elif self.path[1]=='highlightedPatient':
-                
-                
-                resp = data["highlightedPatient"]
-                
-                return json.dumps(resp)
             
             
             elif self.path[1]=='patient':
@@ -83,7 +75,43 @@ class GET_manager(object):
                 
                 return json.dumps(resp)
             
+        elif self.path[0]=='thingspeak':
+            _set_path="settings.json"
+            with open(_set_path) as json_file:
+                data=json.load(json_file)
+
+            if self.path[1]=='settings':
+                resp = {
+                    "broker" : data["broker"],
+                    "port" : data["port"],
+                    "url" : data["thinkspeakSettings"]["tsURL"],
+                    "key" : data["thinkspeakSettings"]["tsKEY"],
+                    "clearURL" : data["thinkspeakSettings"]["tsCLEARURL"],
+                    "field" : data["thinkspeakSettings"]["tsFields"]
+                }
+                return json.dumps(resp)
+
+            if self.path[1]=='highlightedPatient':
+                _set_path="settings.json"
+                with open(_set_path) as json_file:
+                    data=json.load(json_file)
             
+                resp = data["highlightedPatient"]
+                
+                return json.dumps(resp)
+
+            elif self.path[1]=="hightlighted":
+
+                resp = ""
+                uniqueID = self.path[2]
+                
+                if data["patientsList"] != []:
+                    for patient in data["patientsList"]:
+                        if patient["patientID"] == uniqueID:
+                            resp = patient["bodyDevices"][0]["topic"]
+                
+                return json.dumps(resp)
+
         elif self.path[0] == 'telegram':
             _set_path="settings.json"
             with open(_set_path) as json_file:
