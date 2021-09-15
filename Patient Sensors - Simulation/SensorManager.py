@@ -68,36 +68,41 @@ if __name__ == '__main__':
             
             for sensor in sensors:
                 r = requests.get(catalog_address+"/sensors/sim_values/"+sensor["patientID"])
-                conf_simt = r.json()
-                conf_sim = conf_simt["Sim_settings"]  
+                conf_sim = r.json()
 
                 if sensor["e"][0]["n"]=="temperature":
                     sim_t = Simulation(sensor["Thresholds"]["temperatureLow"],sensor["Thresholds"]["temperatureHigh"])
-                    if conf_sim["Temp_sim"] == "r":
-                        c = conf_sim["Temp_status"]
-                        sim_t.Norm_Temp(c)
-                    elif conf_sim["Temp_sim"] == "l":
-                        sim_t.Low_Temp()
-                    elif conf_sim["Temp_sim"] == "h":
-                        sim_t.High_Temp()
+                    for sim in conf_sim:
+                        if sim["sensorName"] == "temperature":
+                            if sim["typeSim"] == "r":
+                                c = sim["statusSim"]
+                                sim_t.Norm_Temp(c)
+                            elif sim["typeSim"] == "l":
+                                sim_t.Low_Temp()
+                            elif sim["typeSim"] == "h":
+                                sim_t.High_Temp()
                 elif sensor["e"][0]["n"]=="weight":
                     sim_w = Simulation(sensor["Thresholds"]["weightLow"],sensor["Thresholds"]["weightHigh"])
-                    if conf_sim["Weight_sim"] == "r":
-                        sim_w.Norm_Weig()
-                    elif conf_sim["Weight_sim"] == "l":
-                        sim_w.Low_Weig()    
-                    elif conf_sim["Weight_sim"] == "h":
-                        sim_w.High_Weig()
+                    for sim in conf_sim:
+                        if sim["sensorName"] == "weight":
+                            if sim["typeSim"] == "r":
+                                sim_w.Norm_Weig()
+                            elif sim["typeSim"] == "l":
+                                sim_w.Low_Weig()    
+                            elif sim["typeSim"] =="h":
+                                sim_w.High_Weig()
                 elif sensor["e"][0]["n"]=="heartrate":
                     sim_hr = Simulation(sensor["Thresholds"]["heartrateLow"],sensor["Thresholds"]["heartrateHigh"])            
-                    if conf_sim["HR_sim"] == "r":
-                        sim_hr.Rest_HR()
-                    elif conf_sim["HR_sim"] == "l":
-                        c = conf_sim["HR_status"]
-                        sim_hr.Low_HR(c)    
-                    elif conf_sim["HR_sim"] == "h":
-                        c = conf_sim["HR_status"]
-                        sim_hr.High_HR(c)
+                    for sim in conf_sim:
+                        if sim["sensorName"] == "heartrate":                    
+                            if sim["typeSim"] == "r":
+                                sim_hr.Rest_HR()
+                            elif sim["typeSim"] == "l":
+                                c = sim["statusSim"]
+                                sim_hr.Low_HR(c)    
+                            elif sim["typeSim"] == "h":
+                                c = sim["statusSim"]
+                                sim_hr.High_HR(c)
 
                 myPubl = myPublisher("SRH_body"+sensor["e"][0]["n"]+str(i), sensor["topic"], conf["broker"], conf["port"],sensor)    
                 myPubl.start()

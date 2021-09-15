@@ -8,6 +8,7 @@ class Patient:
     uniqueID = ""
     disease = ""
     bodySensors = []
+    threshBSensors = []
     houseSensors = []
     controlledActuators = []
     
@@ -24,8 +25,11 @@ class Patient:
         self.disease = datum_list.pop(0)
         if datum_list[0].lower() == "bodysensors" : 
             datum_list.pop(0)
-            while datum_list[0].lower() != "housesensors":
+            while datum_list[0].lower() != "thresbSensors":
                 self.bodySensors.append(datum_list.pop(0))
+            datum_list.pop(0)
+            while datum_list[0].lower() != "housesensors" :
+                self.threshBSensors.append(float(datum_list.pop(0)))
             datum_list.pop(0)
             while datum_list[0].lower() != "controlledactuators":
                 self.houseSensors.append(datum_list.pop(0))
@@ -35,12 +39,23 @@ class Patient:
 
 
     def createFrame(self) -> dict:
+
+        thresDict = {
+        }
+        for keys in self.bodySensors:
+
+            ind = self.bodySensors.index(keys)
+
+            thresDict[keys+"Low"].append(self.threshBSensors[ind*2])
+            thresDict[keys+"High"].append(self.threshBSensors[ind*2+1])
+        
         frame = {
             "name" : self.name,
             "age" : self.age,
             "uniqueID" : self.uniqueID,
             "disease" : self.disease,
             "bodySensors" : self.bodySensors,
+            "Thresholds" : thresDict,
             "houseSensors" : self.houseSensors,
             "controlledActuators" : self.controlledActuators,
             "address" : ""
@@ -60,6 +75,23 @@ class Patient:
         frame = {
             "uniqueID" : self.uniqueID,
             "address" : address
+        }
+
+        return frame
+
+    def updateSimsettings(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+        self.uniqueID = datum_list.pop(0)
+        sensName = datum_list.pop(0)
+        typeSim = datum_list.pop(0)
+        statusSim = datum_list.pop(0)
+
+        frame = {
+            "uniqueID" : self.uniqueID,
+            "sensorName" : sensName,
+            "typeSim" : typeSim,
+            "statusSim" : statusSim
         }
 
         return frame

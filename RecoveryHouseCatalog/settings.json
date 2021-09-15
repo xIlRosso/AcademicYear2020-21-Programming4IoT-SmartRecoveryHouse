@@ -154,15 +154,23 @@
                     "state": ""
                 }
             ],
-            "bodySensorsSimulation": {
-                "Sim_settings": {
-                    "Temp_sim": "r",
-                    "Weight_sim": "r",
-                    "HR_sim": "r",
-                    "Temp_status": "n",
-                    "HR_status": "n"
+            "bodySensorsSimulation": [
+                {
+                    "sensorName" : "temperature",
+                    "typeSim" : "r",
+                    "statusSim" : "n"
+                },
+                {
+                    "sensorName" : "weight",
+                    "typeSim" : "r",
+                    "statusSim" : "n"
+                },
+                {
+                    "sensorName" : "heartrate",
+                    "typeSim" : "r",
+                    "statusSim" : "n"
                 }
-            }
+            ]
         }
     ],
     "doctorsList": [
@@ -246,15 +254,23 @@
         "heartrateLow": 60,
         "heartrateHigh": 75
     },
-    "defaultSimValues": {
-        "Sim_settings": {
-            "Temp_sim": "r",
-            "Weight_sim": "r",
-            "HR_sim": "r",
-            "Temp_status": "n",
-            "HR_status": "n"
+    "defaultSimValues": [
+        {
+            "sensorName" : "temperature",
+            "typeSim" : "r",
+            "statusSim" : "n"
+        },
+        {
+            "sensorName" : "weight",
+            "typeSim" : "r",
+            "statusSim" : "n"
+        },
+        {
+            "sensorName" : "heartrate",
+            "typeSim" : "r",
+            "statusSim" : "n"
         }
-    },
+    ],
     "supportedSensors": {
         "temperature": "C",
         "lumen": "lm",

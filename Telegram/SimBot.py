@@ -249,6 +249,12 @@ class SwitchBot:
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
             frame = 0
 
+        elif name_field == '/updateSimulation':
+            pObj = Patient()
+            frame = pObj.updateSimsettings(val_field)
+            pObj.updateFrame(catalog_address + "/telegram/updateSimulation", frame) #put request
+            frame = 0
+
         elif name_field == '/updateActuator':
             pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)

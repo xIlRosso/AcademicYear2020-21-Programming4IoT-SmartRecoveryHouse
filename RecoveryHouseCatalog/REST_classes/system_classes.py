@@ -503,8 +503,8 @@ class POST_manager():
                         sens = sens.lower()
                         newSensor = copy.deepcopy(all_data["baseSensor"])
                         
-                        tresh = {sens+"Low" : all_data["defaultThreshValues"][sens+"Low"], sens+"High" : all_data["defaultThreshValues"][sens+"High"]}
-                        
+                        tresh = {sens+"Low" : data["Thresholds"][sens+"Low"], sens+"High" : data["Thresholds"][sens+"High"]}
+
                         newSensor["Thresholds"] = tresh
                         newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" 
                         newSensor["patientID"] = newPatient["uniqueID"]
@@ -618,7 +618,20 @@ class PUT_manager():
                                     actuator["tresholds"][1]=data["actHigh"]
                                     
                     json.dump(all_data, open(_set_path,"w"), indent = 4)
-                
+
+            elif self.path[1] == "updateSimulation":
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == data["uniqueID"]:
+                            simsList = patient["bodySensorsSimulation"]
+                            for simulation in simsList:
+                                if simulation["sensorName"] == data["sensorName"]:
+                                    simulation["typeSim"] = data["typeSim"]
+                                    simulation["statusSim"] = data["statusSim"]
+
+                                    
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)             
+
             elif self.path[1] == "registerPatient":
                 if all_data["patientsList"] != []:
                     for patient in all_data["patientsList"]:

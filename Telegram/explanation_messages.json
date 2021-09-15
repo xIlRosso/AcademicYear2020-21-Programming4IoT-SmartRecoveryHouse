@@ -1,7 +1,8 @@
 {
-    "addPatient" : "To add a new patient write the fields as in the example: /addPatient/George_Washington/54/example@domain.com/chronicKidneyDisease/bodySensors/temperature/heartrate/houseSensors/temperature/humidity/controlledActuators/lumen",
+    "addPatient" : "To add a new patient write the fields as in the example: /addPatient/George_Washington/54/example@domain.com/chronicKidneyDisease/bodySensors/temperature/heartrate/thresbSensors/temperatureLow/temperatureHigh/heartrateLow/heartrateHigh/houseSensors/temperature/humidity/controlledActuators/lumen",
     "addDoctor" : "To add a new doctor write the fields as in the example: /addDoctor/Che_Guevara/49/unique@domain.com/patientsAssigned/example1@domain.com/example2@domain.com/example3@domain.com",
     "addCaretaker" : "To add a new caretaker write the fields as in the example: /addCaretaker/Name_Surname/25/unique@domain.com/example@domain.com",
     "addPatientAddress" : "To add a patient address write the fields as in the example: /addPatientAddress/example@domain.com/O_Connels_St_56",
-    "updateActuator" : "To update an actuator treshold of a given patient write the fields as in the following example: /updateActuator/example@domain.com/temperature/17/25"
+    "updateActuator" : "To update an actuator treshold of a given patient write the fields as in the following example: /updateActuator/example@domain.com/temperature/17/25",
+    "updateSimSettings" : "To update the simulation settings of a given patient write the fields as in the following example: /updateSimulation/example@domain.com/temperature/rest, low or high/y(yes) or n(no) for danger scenario"
 }
