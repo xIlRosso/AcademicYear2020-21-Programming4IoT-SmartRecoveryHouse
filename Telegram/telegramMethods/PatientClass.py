@@ -9,6 +9,7 @@ class Patient:
     disease = ""
     bodySensors = []
     threshBSensors = []
+    alarmbSensors = []
     houseSensors = []
     controlledActuators = []
     
@@ -21,15 +22,19 @@ class Patient:
         datum_list.pop(0)
         self.name = datum_list.pop(0)
         self.age = int(datum_list.pop(0))
+        self.weight = int(datum_list.pop(0))
         self.uniqueID = datum_list.pop(0)
         self.disease = datum_list.pop(0)
         if datum_list[0].lower() == "bodysensors" : 
             datum_list.pop(0)
-            while datum_list[0].lower() != "thresbSensors":
+            while datum_list[0].lower() != "thresSensors":
                 self.bodySensors.append(datum_list.pop(0))
             datum_list.pop(0)
-            while datum_list[0].lower() != "housesensors" :
+            while datum_list[0].lower() != "alarmSensors":
                 self.threshBSensors.append(float(datum_list.pop(0)))
+            datum_list.pop(0)            
+            while datum_list[0].lower() != "housesensors" :
+                self.alarmbSensors.append(float(datum_list.pop(0)))
             datum_list.pop(0)
             while datum_list[0].lower() != "controlledactuators":
                 self.houseSensors.append(datum_list.pop(0))
@@ -48,14 +53,24 @@ class Patient:
 
             thresDict[keys+"Low"].append(self.threshBSensors[ind*2])
             thresDict[keys+"High"].append(self.threshBSensors[ind*2+1])
-        
+        alarmDict = {
+        }
+        for keys in self.alarmbSensors:
+
+            ind = self.alarmbSensors.index(keys)
+
+            alarmDict[keys+"Low"].append(self.alarmbSensors[ind*2])
+            alarmDict[keys+"High"].append(self.alarmbSensors[ind*2+1])  
+
         frame = {
             "name" : self.name,
             "age" : self.age,
+            "weight" : self.weight,
             "uniqueID" : self.uniqueID,
             "disease" : self.disease,
             "bodySensors" : self.bodySensors,
-            "Thresholds" : thresDict,
+            "thresholds" : thresDict,
+            "alarms" : alarmDict,
             "houseSensors" : self.houseSensors,
             "controlledActuators" : self.controlledActuators,
             "address" : ""
@@ -92,6 +107,23 @@ class Patient:
             "sensorName" : sensName,
             "typeSim" : typeSim,
             "statusSim" : statusSim
+        }
+
+        return frame
+
+    def updateAlarms(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+        self.uniqueID = datum_list.pop(0)
+        sensorName = datum_list.pop(0)
+        alarmLow = datum_list.pop(0)
+        alarmHigh = datum_list.pop(0)
+
+        frame = {
+            "uniqueID" : self.uniqueID,
+            "sensorName" : sensorName,
+            "alarmLow" : alarmLow,
+            "alarmHigh" : alarmHigh
         }
 
         return frame

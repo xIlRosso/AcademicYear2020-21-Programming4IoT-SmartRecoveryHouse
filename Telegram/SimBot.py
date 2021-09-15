@@ -255,6 +255,12 @@ class SwitchBot:
             pObj.updateFrame(catalog_address + "/telegram/updateSimulation", frame) #put request
             frame = 0
 
+        elif name_field == '/updateAlarms':
+            pObj = Patient()
+            frame = pObj.updateAlarms(val_field)
+            pObj.updateFrame(catalog_address + "/telegram/updateAlarms", frame) #put request
+            frame = 0
+
         elif name_field == '/updateActuator':
             pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)

@@ -216,7 +216,8 @@
     "baseSensor": {
         "topic": "",
         "patientID": "",
-        "Thresholds": {},
+        "simThresholds": {},
+        "alarmThresholds": {},
         "timesVisited": 0,
         "bn": "",
         "e": [
@@ -254,6 +255,14 @@
         "heartrateLow": 60,
         "heartrateHigh": 75
     },
+    "defaultAlarmValues": {
+        "temperatureLow": 41,
+        "temperatureHigh": 34.7,
+        "weightLow": 64,
+        "weightHigh": 72,
+        "heartrateLow": 45,
+        "heartrateHigh": 100
+    },    
     "defaultSimValues": [
         {
             "sensorName" : "temperature",

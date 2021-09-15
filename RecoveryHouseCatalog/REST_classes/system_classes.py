@@ -493,6 +493,7 @@ class POST_manager():
                     
                     newPatient["name"] = data["name"]
                     newPatient["age"] = data["age"]
+                    newPatient["weight"] = data["weight"]
                     newPatient["uniqueID"] = data["uniqueID"]
                     newPatient["disease"] = data["disease"]
                     newPatient["bodySensorsSimulation"] = all_data["defaultSimValues"]
@@ -502,16 +503,22 @@ class POST_manager():
                     for sens in data["bodySensors"]:
                         sens = sens.lower()
                         newSensor = copy.deepcopy(all_data["baseSensor"])
-                        
-                        tresh = {sens+"Low" : data["Thresholds"][sens+"Low"], sens+"High" : data["Thresholds"][sens+"High"]}
-
-                        newSensor["Thresholds"] = tresh
+                        tresh = {
+                            sens+"Low" : data["thresholds"][sens+"Low"],
+                            sens+"High" : data["thresholds"][sens+"High"]
+                        }
+                        newSensor["simThresholds"] = tresh
+                        alarm = {
+                            sens+"Low" : data["alarms"][sens+"Low"],
+                            sens+"High" : data["alarms"][sens+"High"]
+                        }
+                        newSensor["alarmThresholds"] = alarm
                         newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" 
                         newSensor["patientID"] = newPatient["uniqueID"]
                         newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
                         newSensor["e"][0]["n"] = sens      
                         newSensor["e"][0]["u"] = all_data["supportedSensors"][sens]
-                        
+                    
                         newPatient["bodyDevices"].append(newSensor)
                         newSensor = None
                         
@@ -616,6 +623,18 @@ class PUT_manager():
                                 if actuator["name"] == data["actName"]:
                                     actuator["tresholds"][0]=data["actLow"]
                                     actuator["tresholds"][1]=data["actHigh"]
+                                    
+                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+
+            elif self.path[1] == "updateAlarms":
+                if all_data["patientsList"] != []:
+                    for patient in all_data["patientsList"]:
+                        if patient["uniqueID"] == data["uniqueID"]:
+                            sensorList = patient["bodyDevices"]
+                            for alarm in sensorList:
+                                if alarm["e"][0]["n"] == data["sensorName"]:
+                                    alarm["alarmThresholds"][alarm["e"][0]["n"]+"Low"]=data["alarmLow"]
+                                    alarm["alarmThresholds"][alarm["e"][0]["n"]+"High"]=data["alarmHigh"]
                                     
                     json.dump(all_data, open(_set_path,"w"), indent = 4)
 
