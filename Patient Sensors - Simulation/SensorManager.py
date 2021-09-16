@@ -68,7 +68,7 @@ if __name__ == '__main__':
                 conf_sim = r.json()
 
                 if sensor["e"][0]["n"]=="temperature":
-                    sim_t = Simulation(sensor["Thresholds"]["temperatureLow"],sensor["Thresholds"]["temperatureHigh"])
+                    sim_t = Simulation(sensor["simThresholds"]["temperatureLow"],sensor["simThresholds"]["temperatureHigh"])
                     for sim in conf_sim:
                         if sim["sensorName"] == "temperature":
                             if sim["typeSim"] == "r":
@@ -79,7 +79,7 @@ if __name__ == '__main__':
                             elif sim["typeSim"] == "h":
                                 sim_t.High_Temp()
                 elif sensor["e"][0]["n"]=="weight":
-                    sim_w = Simulation(sensor["Thresholds"]["weightLow"],sensor["Thresholds"]["weightHigh"])
+                    sim_w = Simulation(sensor["simThresholds"]["weightLow"],sensor["simThresholds"]["weightHigh"])
                     for sim in conf_sim:
                         if sim["sensorName"] == "weight":
                             if sim["typeSim"] == "r":
@@ -89,7 +89,7 @@ if __name__ == '__main__':
                             elif sim["typeSim"] =="h":
                                 sim_w.High_Weig()
                 elif sensor["e"][0]["n"]=="heartrate":
-                    sim_hr = Simulation(sensor["Thresholds"]["heartrateLow"],sensor["Thresholds"]["heartrateHigh"])            
+                    sim_hr = Simulation(sensor["simThresholds"]["heartrateLow"],sensor["simThresholds"]["heartrateHigh"])            
                     for sim in conf_sim:
                         if sim["sensorName"] == "heartrate":                    
                             if sim["typeSim"] == "r":

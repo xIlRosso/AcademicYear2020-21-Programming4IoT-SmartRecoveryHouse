@@ -5,11 +5,11 @@ import requests
 from mqtt_methods.mqtt_methods import *
 
 class mySubscriber():
-    def __init__(self, clientID, topic, broker, port, threadID, url, key, field):
+    def __init__(self, clientID, topic, broker, port, url, key, field):
         self.client = MyMQTT(clientID, broker, port, self)
         self.topic = topic
         self.status = None
-        self.threadID = threadID
+        self.threadID = 0
         self.url = url
         self.key = key
         self.field = field
@@ -50,7 +50,7 @@ class mySubscriber():
     
 class Catalog(mySubscriber):
 
-    def __init__(self, url, key, field):
+    def __init__(self, catalog_address, url, key, field):
         self.url = url
         self.key = key
         self.field = field
@@ -114,8 +114,8 @@ if __name__ == "__main__":
         #here get the unique id key: uniqueID
         
         r = requests.get(catalog_address+"/thingspeak/highlightedPatient")
-        unIDt = r.json()
-        unID = unIDt["patientID"]
+        unID = r.json()
+        
 
         if unID != oldID: 
             clear_thingspeak(conf["clearURL"])
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 
         #here get the topic to subscribe to the highlighted patient
 
-        mySub = mySubscriber("AlexSubs920318_client1", topic_sens_t, broker, port, conf["field"], conf["url"], conf["key"])
+        mySub = mySubscriber("AlexSubs920318_client1", topic_sens_t, broker, port,  conf["url"], conf["key"], conf["field"])
 
         mySub.start()
         time.sleep(25)

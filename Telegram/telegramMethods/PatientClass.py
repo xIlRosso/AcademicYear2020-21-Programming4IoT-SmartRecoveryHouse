@@ -94,6 +94,17 @@ class Patient:
 
         return frame
 
+
+    def changeHighlighted(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+
+        frame = {
+            "uniqueID" : datum_list.pop(0)
+        }
+
+        return frame
+
     def addAddress(self, datum) -> dict:
         datum_list = datum.split('/')
         datum_list.pop(0)

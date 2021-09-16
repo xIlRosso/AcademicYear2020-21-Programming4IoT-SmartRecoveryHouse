@@ -100,14 +100,14 @@ class GET_manager(object):
                 
                 return json.dumps(resp)
 
-            elif self.path[1]=="hightlighted":
+            elif self.path[1]=="highlighted":
 
                 resp = ""
                 uniqueID = self.path[2]
                 
                 if data["patientsList"] != []:
                     for patient in data["patientsList"]:
-                        if patient["patientID"] == uniqueID:
+                        if patient["uniqueID"] == uniqueID:
                             resp = patient["bodyDevices"][0]["topic"]
                 
                 return json.dumps(resp)
@@ -345,7 +345,7 @@ class POST_manager():
                             sens+"High" : data["alarms"][sens+"High"]
                         }
                         newSensor["alarmThresholds"] = alarm
-                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body/" 
+                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/body"
                         newSensor["patientID"] = newPatient["uniqueID"]
                         newSensor["bn"] = newPatient["uniqueID"] + "/body/" + sens
                         newSensor["e"][0]["n"] = sens      
@@ -359,7 +359,7 @@ class POST_manager():
                         sens = sens.lower()
                         newSensor = copy.deepcopy(all_data["baseSensor"])
                         
-                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house/"
+                        newSensor["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/house"
                         newSensor["patientID"] = newPatient["uniqueID"]
                         newSensor["bn"] = newPatient["uniqueID"] + "/house/" + sens
                         newSensor["e"][0]["n"] = sens      
@@ -372,7 +372,7 @@ class POST_manager():
                         actuator = actuator.lower()
                         newActuator = copy.deepcopy(all_data["baseActuator"])
                         
-                        newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator/"
+                        newActuator["topic"] = all_data["baseTopic"] + "/" + newPatient["uniqueID"] + "/actuator"
                         newActuator["patientID"] = newPatient["uniqueID"]
                         newActuator["unit"] = all_data["supportedActuators"][actuator]
                         newActuator["name"] = actuator
@@ -556,6 +556,12 @@ class PUT_manager():
                             
                     json.dump(all_data, open(_set_path, "w"), indent = 4)
             
+            elif self.path[1] == "updateHighlighted":
+                upID = data["uniqueID"]
+                
+                all_data["highlightedPatient"] = upID
+                
+                json.dump(all_data, open(_set_path,"w"), indent = 4)
             
         elif self.path[0] == "sensors":
             if self.path[1] == "updateTimeVisited":
@@ -605,6 +611,8 @@ class DELETE_manager():
                     for patient in all_data["patientsList"]:
                         if patient["uniqueID"] == uniqueID:
                             all_data["patientsList"].pop(i)
+                            if patient["uniqueID"] == all_data["highlightedPatient"]:
+                                all_data["highlightedPatient"] = ""
                             
                         i+=1
                         

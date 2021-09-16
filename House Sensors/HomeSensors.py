@@ -47,16 +47,16 @@ if __name__ == "__main__":
 
     S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
 
-    with open("House Sensors/catalog_url.json") as json_in:
-        dat=json.load(json_in)
-        catalog_address=dat["url_catalog"]
-
     i=0
     while i<10:
         S.start()
         time.sleep(4)
         S.stop()
         i+=2
+
+    with open("House Sensors/catalog_url.json") as json_in:
+        dat=json.load(json_in)
+        catalog_address=dat["url_catalog"]
 
     #ok so first of all get configuration file
     #in the config should be mean and var for every type of sensor
@@ -92,6 +92,6 @@ if __name__ == "__main__":
             print("Computing and publishing the next house")
 
 
-        time.sleep(1)
+        time.sleep(4)
 
 

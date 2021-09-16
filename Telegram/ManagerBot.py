@@ -135,6 +135,7 @@ class SwitchBot:
         msg+= "\t - /addSensor : write the command + /uniqueID/body/name_sensor ; body can be house if you want a house sensor, you need to be logged as a doctor\n"
         msg+= "\t - /assignPatient : write the command + /uniqueIDdoctor/uniqueIDpatient\n"
         msg+= "\t - /assignPatientCaretaker : write the command + /uniqueCaretakerID/uniqueIDpatient\n"
+        msg+= "\t - /updateHighlighted : write the command + /uniqueID"
 
 
         return msg
@@ -349,20 +350,11 @@ class SwitchBot:
             frame = cObj.assignPatient(val_field)
             cObj.updateFrame(catalog_address + "/telegram/assignPatientCaretaker", frame)
 
-        # elif name_field == '/folder/name':
-        #     # message=val_field
-        #     self.folder['Name'] = val_field
-        #     #/folder/name/Giovanni
-        # elif name_field == '/folder/age' :
-        #     self.folder['Age'] = val_field
-        # elif name_field == '/folder/height' :
-        #     self.folder['Height'] = val_field
-        # elif name_field == '/folder/weight' :
-        #     self.folder['Weight'] = val_field                        
-        # elif name_field == '/folder/diagnostic' :
-        #     self.folder['Diagnostic'] = val_field
-        #     requests.post(catalog_address+"/folder_patient", json=self.folder)
-        #     flagFolder=999
+        elif name_field =='/updateHighlighted':
+            pObj = Patient()
+            frame = pObj.changeHighlighted(val_field)
+            pObj.updateFrame(catalog_address + "/telegram/updateHighlighted", frame)
+
 
         else:
             self.bot.sendMessage(chat_ID, text="Command not supported, write /help for a list of commands")
