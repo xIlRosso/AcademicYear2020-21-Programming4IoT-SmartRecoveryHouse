@@ -390,6 +390,8 @@ class SwitchBot:
             self.bot.sendMessage(chat_ID, text = query_data)
         elif message == "Select what do you want to update":
             self.bot.sendMessage(chat_ID, text = query_data)
+        elif message == "Select who do you want to delete":
+            self.bot.sendMessage(chat_ID, text = query_data)
 
 if __name__ == "__main__":
 
@@ -408,7 +410,7 @@ if __name__ == "__main__":
         dat=json.load(json_in)
         catalog_address=dat["url_catalog"]
 
-    r = requests.get(catalog_address+"/telegram_bot/settings")
+    r = requests.get(catalog_address+"/telegram/settings")
 
     conf = r.json()
 
@@ -420,7 +422,7 @@ if __name__ == "__main__":
     # SimpleSwitchBot
     broker = conf["broker"]
     port = conf["port"]
-    topic = conf["topic2"]
+    topic = conf["topic_commands"]
     #ssb = SimpleSwitchBot(token, broker, port, topic)
     
     flagID=999

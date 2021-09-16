@@ -117,7 +117,21 @@ class GET_manager(object):
             with open(_set_path) as json_file:
                 data=json.load(json_file)
                 
-            if self.path[1] == 'get_pins':
+                
+                
+            if self.path[1]=='settings':
+                resp={
+                    "TG_Token": data['TG_Token'],
+                    "broker" : data['broker'],
+                    "port" : data['port'],
+                    "topic_commands" : data['telegramTopics']['t_bot_topic'],
+                    "topic_alarms" : data['telegramTopics']['sim_bot_topic']
+                }
+                
+                return json.dumps(resp)
+            
+            
+            elif self.path[1] == 'get_pins':
                 
                 resp = {
                     "Patient": [],

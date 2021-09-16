@@ -27,10 +27,10 @@ class Patient:
         self.disease = datum_list.pop(0)
         if datum_list[0].lower() == "bodysensors" : 
             datum_list.pop(0)
-            while datum_list[0].lower() != "thresSensors":
+            while datum_list[0].lower() != "thressensors":
                 self.bodySensors.append(datum_list.pop(0))
             datum_list.pop(0)
-            while datum_list[0].lower() != "alarmSensors":
+            while datum_list[0].lower() != "alarmsensors":
                 self.threshBSensors.append(float(datum_list.pop(0)))
             datum_list.pop(0)            
             while datum_list[0].lower() != "housesensors" :
@@ -51,16 +51,17 @@ class Patient:
 
             ind = self.bodySensors.index(keys)
 
-            thresDict[keys+"Low"].append(self.threshBSensors[ind*2])
-            thresDict[keys+"High"].append(self.threshBSensors[ind*2+1])
+            thresDict.update({keys+"Low" : self.threshBSensors[ind*2],
+                        keys+"High" :self.threshBSensors[ind*2+1]
+            })
         alarmDict = {
         }
-        for keys in self.alarmbSensors:
+        for keys in self.bodySensors:
 
-            ind = self.alarmbSensors.index(keys)
+            ind = self.bodySensors.index(keys)
 
-            alarmDict[keys+"Low"].append(self.alarmbSensors[ind*2])
-            alarmDict[keys+"High"].append(self.alarmbSensors[ind*2+1])  
+            alarmDict.update({keys+"Low":self.alarmbSensors[ind*2],
+           keys+"High" : self.alarmbSensors[ind*2+1]})
 
         frame = {
             "name" : self.name,

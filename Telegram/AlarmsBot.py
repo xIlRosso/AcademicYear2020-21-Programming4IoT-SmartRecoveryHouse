@@ -74,12 +74,10 @@ class SwitchBot:
                 patients = r.json()
                 if patients!=[]:
                     for patient in patients:
-                        if patient["alarms_patient"] != "normal":
+                        if patient["alarms_patient"] != "normal" and patient["alarms_patient"] != "":
                             self.bot.sendMessage(chat_ID, text='Patient '+patient["uniqueID"]+' has a '+patient["alarms_patient"]+ ' value than the treshold')
-
-
-                #stampa degli allarmi se ce n'è bisogno
-                #time.sleep(20)
+                
+                time.sleep(20)
                 
         # elif message == "/sens":
         #     buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature measurement {self.measurements("Temp",1)}'),
@@ -164,7 +162,7 @@ class SwitchBot:
 
 if __name__ == "__main__":
 
-    with open("catalog_mqtt_settings.json","r") as json_in:
+    with open("Telegram/catalog_mqtt_settings.json","r") as json_in:
         setsCatalog = json.load(json_in)
 
     S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
@@ -179,7 +177,7 @@ if __name__ == "__main__":
         dat=json.load(json_in)
         catalog_address=dat["url_catalog"]
 
-    r = requests.get(catalog_address+"/telegram_bot/settings")
+    r = requests.get(catalog_address+"/telegram/settings")
 
     conf = r.json()
 
@@ -192,7 +190,7 @@ if __name__ == "__main__":
     # SimpleSwitchBot
     broker = conf["broker"]
     port = conf["port"]
-    topic = conf["topic1"]
+    topic = conf["topic_alarms"]
     #ssb = SimpleSwitchBot(token, broker, port, topic)
     
     

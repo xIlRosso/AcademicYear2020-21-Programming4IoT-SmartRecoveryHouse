@@ -6,7 +6,7 @@
     "updateActuator" : "To update an actuator treshold of a given patient write the fields as in the following example: /updateActuator/example@domain.com/temperature/17/25",
     "updateSimSettings" : "To update the simulation settings of a given patient write the fields as in the following example: /updateSimulation/example@domain.com/temperature/rest, low or high/y(yes) or n(no) for danger scenario",
     "updateAlarms" : "To update the alarms thresholds of a given patient's sensor write the fields as in the following example: /updateAlarms/example@domain.com/temperature/lowest value/highest value",
-    "removePatient" : "To remove a patient you need to be logged in as a doctor, then write /deletePatient/uniqueID",
-    "removeDoctor" : "To remove a doctor you need to be logged in as a doctor, then write /deleteDoctor/uniqueID",
-    "removeCaretaker" : "To remove a caretaker you need to be logged in as a doctor, then write /deleteCaretaker/uniqueID"
+    "deletePatient" : "To remove a patient you need to be logged in as a doctor, then write /deletePatient/uniqueID",
+    "deleteDoctor" : "To remove a doctor you need to be logged in as a doctor, then write /deleteDoctor/uniqueID",
+    "deleteCaretaker" : "To remove a caretaker you need to be logged in as a doctor, then write /deleteCaretaker/uniqueID"
 }
