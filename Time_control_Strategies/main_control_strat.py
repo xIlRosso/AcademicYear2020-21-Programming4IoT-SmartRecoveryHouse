@@ -93,6 +93,7 @@ if __name__=='__main__':
                 if actuator["name"] == "time":
                     tObj = TimeShift(actuator["tresholds"])
                     actuator["state"] = tObj.run()
+                    requests.post(catalog_address+"/updateSens/actuator/"+actuator["patientID"], json = actuator)
                     msgToPub.append(actuator)
                 else:
                     if house["houseDevices"]!=[]:
@@ -112,6 +113,7 @@ if __name__=='__main__':
                                     #then use the tresholds and check for on/off
                                     sObj = Actuators(actuator["tresholds"])
                                     actuator["state"] = sObj.run(val)#put the value in run
+                                    requests.post(catalog_address+"/updateSens/actuator/"+actuator["patientID"], json = actuator)
                                     msgToPub.append(actuator)
 
             myClient.publish(actuator["topic"], payload = json.dumps(msgToPub))

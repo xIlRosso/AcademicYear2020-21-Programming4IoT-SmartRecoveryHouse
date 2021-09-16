@@ -4,7 +4,8 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import json, time
 import requests
 import telegramMethods as tm
-
+from telegramMethods.MyMQTT import *
+from telegramMethods.MQTT_telegram import *
 
 flagID=999
 class MyBot:
@@ -28,7 +29,7 @@ class SwitchBot:
         self.catalog = address
         self.tokenBot = token
         self.bot = telepot.Bot(self.tokenBot)
-        self.client = tm.MyMQTT.MyMQTT("telegramBot",broker,port,None)
+        self.client = MyMQTT("telegramBot",broker,port,None)
         self.client.start()
         self.topic = topic
         self._message = {'bn': "telegrambot",
@@ -62,78 +63,84 @@ class SwitchBot:
         content_type, chat_type, chat_ID = telepot.glance(msg)
         message = msg['text']
         global flagID
-        r = requests.get(catalog_address+"/telegram_bot/pin_ids")
-        pins = r.json()
-        f = requests.get(catalog_address+"/telegram_bot/patient_alarms")
-        alarm = f.json()
+        
 
         if message == "/start":
-            buttons=[[InlineKeyboardButton(text=f'Doctor', callback_data=f'Doctor'),
-                    InlineKeyboardButton(text=f'Caregiver', callback_data=f'Caregiver'),
-                    InlineKeyboardButton(text=f'Patient', callback_data=f'Patient')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-            self.bot.sendMessage(chat_ID, text='Please identify yourself', reply_markup=keyboard)
             
-        elif message == "/sens":
-            buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature measurement {self.measurements("Temp",1)}'),
-                    InlineKeyboardButton(text=f'HeartBeat', callback_data=f'Heart Beat measurement {self.measurements("HeartR",1)}'),
-                    InlineKeyboardButton(text=f'Weight', callback_data=f'Weight measurement {self.measurements("Weight",1)}')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+            self.bot.sendMessage(chat_ID, text='Starting alarms bot...')
+            
+            while True:
+                r=requests.get(catalog_address+"/telegram/alarm_status")
+                patients = r.json()
+                if patients!=[]:
+                    for patient in patients:
+                        if patient["alarms_patient"] != "normal":
+                            self.bot.sendMessage(chat_ID, text='Patient '+patient["uniqueID"]+' has a '+patient["alarms_patient"]+ ' value than the treshold')
 
-            self.bot.sendMessage(chat_ID, text='Select a patient sensor', reply_markup=keyboard)
 
-        elif message == "/house":
-            buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature measurement {self.measurements("Temperature",2)}'),
-                    InlineKeyboardButton(text=f'LightIntensity', callback_data=f'LightIntensity measurement {self.measurements("LuminousIntensity",2)}'),
-                    InlineKeyboardButton(text=f'Humidity', callback_data=f'Humidity measurement {self.measurements("Humidity",2)}')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-            self.bot.sendMessage(chat_ID, text='Select a house sensor', reply_markup=keyboard)
+                #stampa degli allarmi se ce n'è bisogno
+                #time.sleep(20)
+                
+        # elif message == "/sens":
+        #     buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature measurement {self.measurements("Temp",1)}'),
+        #             InlineKeyboardButton(text=f'HeartBeat', callback_data=f'Heart Beat measurement {self.measurements("HeartR",1)}'),
+        #             InlineKeyboardButton(text=f'Weight', callback_data=f'Weight measurement {self.measurements("Weight",1)}')]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
 
-        elif message == "/actuat" and (flagID == 1 or flagID == 2):
-            buttons=[[InlineKeyboardButton(text=f'Act 1', callback_data=f'State Actuator 1 {self.measurements("Actuator1",3)}'),
-                    InlineKeyboardButton(text=f'Act 2', callback_data=f'State Actuator 2 {self.measurements("Actuator2",3)}'),
-                    InlineKeyboardButton(text=f'Lights', callback_data=f'State Lights {self.measurements("Lights",3)}'),
-                    InlineKeyboardButton(text=f'Heating', callback_data=f'State Heating {self.measurements("Heating",3)}'),
-                    InlineKeyboardButton(text=f'Humidifier', callback_data=f'State Humidifier {self.measurements("Humidifier",3)}')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-            self.bot.sendMessage(chat_ID, text='Select an actuator', reply_markup=keyboard)
+        #     self.bot.sendMessage(chat_ID, text='Select a patient sensor', reply_markup=keyboard)
 
-        elif message == "/regres" and flagID == 1:
-            buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature regression {self.measurements("Temp",4)}'),
-                    InlineKeyboardButton(text=f'HeartBeat', callback_data=f'Heart Beat regression {self.measurements("HeartR",4)}'),
-                    InlineKeyboardButton(text=f'Weight', callback_data=f'Weight regression {self.measurements("Weight",4)}')]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-            self.bot.sendMessage(chat_ID, text='Select a sensor for the regression', reply_markup=keyboard)
+        # elif message == "/house":
+        #     buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature measurement {self.measurements("Temperature",2)}'),
+        #             InlineKeyboardButton(text=f'LightIntensity', callback_data=f'LightIntensity measurement {self.measurements("LuminousIntensity",2)}'),
+        #             InlineKeyboardButton(text=f'Humidity', callback_data=f'Humidity measurement {self.measurements("Humidity",2)}')]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        #     self.bot.sendMessage(chat_ID, text='Select a house sensor', reply_markup=keyboard)
 
-        elif message == pins["Doctor_PIN"]:
-            flagID = 1
-            self.bot.sendMessage(chat_ID, text='Access to /sens, /regres, /actuat, /house commands is granted')
+        # elif message == "/actuat" and (flagID == 1 or flagID == 2):
+        #     buttons=[[InlineKeyboardButton(text=f'Act 1', callback_data=f'State Actuator 1 {self.measurements("Actuator1",3)}'),
+        #             InlineKeyboardButton(text=f'Act 2', callback_data=f'State Actuator 2 {self.measurements("Actuator2",3)}'),
+        #             InlineKeyboardButton(text=f'Lights', callback_data=f'State Lights {self.measurements("Lights",3)}'),
+        #             InlineKeyboardButton(text=f'Heating', callback_data=f'State Heating {self.measurements("Heating",3)}'),
+        #             InlineKeyboardButton(text=f'Humidifier', callback_data=f'State Humidifier {self.measurements("Humidifier",3)}')]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        #     self.bot.sendMessage(chat_ID, text='Select an actuator', reply_markup=keyboard)
 
-        elif message == pins["Caregiver_PIN"]:
-            flagID = 2
-            self.bot.sendMessage(chat_ID, text='Access to /sens, /actuat, /house command is granted')
+        # elif message == "/regres" and flagID == 1:
+        #     buttons=[[InlineKeyboardButton(text=f'Temperature', callback_data=f'Temperature regression {self.measurements("Temp",4)}'),
+        #             InlineKeyboardButton(text=f'HeartBeat', callback_data=f'Heart Beat regression {self.measurements("HeartR",4)}'),
+        #             InlineKeyboardButton(text=f'Weight', callback_data=f'Weight regression {self.measurements("Weight",4)}')]]
+        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+        #     self.bot.sendMessage(chat_ID, text='Select a sensor for the regression', reply_markup=keyboard)
 
-        elif message == pins["Patient_PIN"]:
-            flagID = 3
-            self.bot.sendMessage(chat_ID, text='Access to /sens, /house commands is granted')
+        # elif message == pins["Doctor_PIN"]:
+        #     flagID = 1
+        #     self.bot.sendMessage(chat_ID, text='Access to /sens, /regres, /actuat, /house commands is granted')
 
-        else:
-            self.bot.sendMessage(chat_ID, text="Command not supported")
+        # elif message == pins["Caregiver_PIN"]:
+        #     flagID = 2
+        #     self.bot.sendMessage(chat_ID, text='Access to /sens, /actuat, /house command is granted')
+
+        # elif message == pins["Patient_PIN"]:
+        #     flagID = 3
+        #     self.bot.sendMessage(chat_ID, text='Access to /sens, /house commands is granted')
+
+        # else:
+        #     self.bot.sendMessage(chat_ID, text="Command not supported")
         
-        if alarm["Temp"] == 1:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient Temperature is High")
-        elif alarm["Temp"] == 2:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient Temperature is Low")   
+        # if alarm["Temp"] == 1:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient Temperature is High")
+        # elif alarm["Temp"] == 2:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient Temperature is Low")   
 
-        if alarm["Weight"] == 1:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient Weight is High")
-        elif alarm["Weight"] == 2:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient Weight is Low") 
+        # if alarm["Weight"] == 1:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient Weight is High")
+        # elif alarm["Weight"] == 2:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient Weight is Low") 
 
-        if alarm["HeartR"] == 1:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient HeartRate is High")
-        elif alarm["HeartR"] == 2:
-            self.bot.sendMessage(chat_ID, text="Warning! Patient HeartRate is Low") 
+        # if alarm["HeartR"] == 1:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient HeartRate is High")
+        # elif alarm["HeartR"] == 2:
+        #     self.bot.sendMessage(chat_ID, text="Warning! Patient HeartRate is Low") 
 
     def on_callback_query(self,msg):
         query_ID, chat_ID, query_data = telepot.glance(msg,flavor='callback_query')  
@@ -160,7 +167,7 @@ if __name__ == "__main__":
     with open("catalog_mqtt_settings.json","r") as json_in:
         setsCatalog = json.load(json_in)
 
-    S=tm.MQTT_telegram.Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
+    S=Subscribers(setsCatalog["ID"], setsCatalog["topic"], setsCatalog["broker"], setsCatalog["port"])
     i=0
     while i<10:
         S.start()

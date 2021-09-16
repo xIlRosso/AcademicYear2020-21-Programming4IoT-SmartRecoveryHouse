@@ -58,17 +58,7 @@ class SwitchBot:
                        'Weight': "",
                        'Diagnostic': ""}
     
-    def send_simulations(self,a,b,Sens_name):
-        if Sens_name == "Temp_sim":
-            self.sims[Sens_name] = a
-            self.sims["Temp_status"] = b
-        elif Sens_name == "HR_sim": 
-            self.sims[Sens_name] = a
-            self.sims["HR_status"] = b 
-        else:
-            self.sims[Sens_name] = a
-        requests.post(catalog_address+"/simulation_settings", json=self.sims)
-        return("Simulation started")
+    
 
     def split_message(self, msg):
         name_field=msg.split('/')
@@ -83,7 +73,7 @@ class SwitchBot:
         return tmp_var, val_field
 
     def supportedFeatures(self) -> str:
-        r=requests.get(catalog_address+"/telegram_bot/supported")
+        r=requests.get(catalog_address+"/telegram/supported")
         dicts = r.json()
         ansSupported = ""
         for key in dicts:
@@ -113,6 +103,41 @@ class SwitchBot:
                     if idpw["pin"] == pw:
                         logged[key] = True
 
+    def print_all_values(self, uniqueID) -> str:
+        r = requests.get(catalog_address+"/telegram/getVals"+uniqueID)
+        last_values = r.json()
+
+        msg = ""
+
+        name_unit = last_values["measUnit"]
+        values = last_values["sensValues"]
+
+        #last_values dict with correspondence between name sensor and unit
+        #dict with "nameSensor" : value
+        for key in values:
+            msg += key + ": " + values[key] + " ["+name_unit[key]+"]\n"
+            
+        return msg
+
+    def build_help(self) -> str:
+        msg = ""
+        msg+= "\t - /addSomeone\n"
+        msg+= "\t - /updateField\n"
+        msg+= "\t - /supported : shows list of supported actuators and sensors\n"
+        msg+= "\t - /login : write the command + /uniqueID/password\n"
+        msg+= "\t - /logout : everything logs out\n"
+        msg+= "\t - /patientPinRegistration : write the command + /uniqueID/pin\n"
+        msg+= "\t - /doctorPinRegistration : write the command + /uniqueID/pin\n"
+        msg+= "\t - /caretakerPinRegistration : write the command + /uniqueID/pin\n"
+        msg+= "\t - /deleteSomeone : to see how to delete someone\n"
+        msg+= "\t - /patientValues : write the command + /uniqueID to see all the values of sensors and actuators\n"
+        msg+= "\t - /removeSensor : write the command + /uniqueID/body/name_sensor ; body can be house if you want a house sensor, you need to be logged as a doctor\n"
+        msg+= "\t - /addSensor : write the command + /uniqueID/body/name_sensor ; body can be house if you want a house sensor, you need to be logged as a doctor\n"
+        msg+= "\t - /assignPatient : write the command + /uniqueIDdoctor/uniqueIDpatient\n"
+        msg+= "\t - /assignPatientCaretaker : write the command + /uniqueCaretakerID/uniqueIDpatient\n"
+
+
+        return msg
 
 
     def on_chat_message(self, msg):
@@ -124,6 +149,8 @@ class SwitchBot:
         with open("Telegram/explanation_messages.json") as json_in:
             explanations = json.load(json_in)
         
+        
+
         # r=requests.get(catalog_address+"/telegram_bot/pin_ids")
         # pins = r.json()
         if flagFolder!=999:
@@ -133,50 +160,10 @@ class SwitchBot:
         if message == "/start":
             self.bot.sendMessage(chat_ID, text='Welcome to the telegram bot')
             flagFolder = 3
+
+        elif message == "/help":
             
-        # elif message == "/options" and flagID == 1:
-        #     buttons=[[InlineKeyboardButton(text=f'Med Folder', callback_data='/folder'),
-        #             InlineKeyboardButton(text=f'Simulations', callback_data='/Sim')]]
-        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-
-        #     self.bot.sendMessage(chat_ID, text='Select an option', reply_markup=keyboard)
-
-        # elif message == "/folder" and flagID == 1:
-        #     buttons=[[InlineKeyboardButton(text=f'Create Folder', callback_data=1)]]
-        #     keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-
-        #     self.bot.sendMessage(chat_ID, text="Fill the folder's patient, please write /folder followed by /name, /age, /height, /weight, /diagnostic and the field as /field. Click on the button Create Folder in order to activate input mode", reply_markup=keyboard)
-    
-
-        elif message == "/Sim" and flagID == 1:
-            buttons=[[InlineKeyboardButton(text=f'Temp Fever', callback_data=self.send_simulations("r","y","Temp_sim")),
-                    InlineKeyboardButton(text=f'Normal Temp', callback_data=self.send_simulations("r","n","Temp_sim")),
-                    InlineKeyboardButton(text=f'Low Temp', callback_data=self.send_simulations("l","n","Temp_sim"))]]
-            buttons2=[[InlineKeyboardButton(text=f'High Temp', callback_data=self.send_simulations("h","n","Temp_sim")),
-                    InlineKeyboardButton(text=f'Normal Weight', callback_data=self.send_simulations("r","n","Weight_sim")),
-                    InlineKeyboardButton(text=f'Low Weight', callback_data=self.send_simulations("l","n","Weight_sim"))]]
-                    # InlineKeyboardButton(text=f'Next Options', callback_data="next_one"]]
-            buttons3=[[InlineKeyboardButton(text=f'High Weight', callback_data=self.send_simulations("h","n","Weight_sim")),
-                    InlineKeyboardButton(text=f'Normal HR', callback_data=self.send_simulations("r","n","HR_sim")),
-                    InlineKeyboardButton(text=f'Low HR (HA)', callback_data=self.send_simulations("l","y","HR_sim"))]]
-            buttons4=[[
-                    InlineKeyboardButton(text=f'Low HR', callback_data=self.send_simulations("l","n","HR_sim")),
-                    InlineKeyboardButton(text=f'High HR (HA)', callback_data=self.send_simulations("h","y","HR_sim")),
-                    InlineKeyboardButton(text=f'High HR', callback_data=self.send_simulations("h","n","HR_sim"))]]
-            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
-            keyboard2= InlineKeyboardMarkup(inline_keyboard=buttons2)
-            keyboard3= InlineKeyboardMarkup(inline_keyboard=buttons3)
-            keyboard4= InlineKeyboardMarkup(inline_keyboard=buttons4)
-            
-
-            self.bot.sendMessage(chat_ID, text="Select a simulation to run", reply_markup=keyboard)
-            self.bot.sendMessage(chat_ID, text="More options", reply_markup=keyboard2)
-            self.bot.sendMessage(chat_ID, text="More options", reply_markup=keyboard3)
-            self.bot.sendMessage(chat_ID, text="More options", reply_markup=keyboard4)
-
-        # elif message == pins["Doctor_PIN"]:
-        #     flagID = 1
-        #     self.bot.sendMessage(chat_ID, text='Access granted, please write /options')
+            self.bot.sendMessage(chat_ID, text = self.build_help())
 
         elif message == "/addSomeone":
             buttons=[[InlineKeyboardButton(text=f'Patient', callback_data="/newPt"),
@@ -186,9 +173,19 @@ class SwitchBot:
             keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
             self.bot.sendMessage(chat_ID, text="Select who do you want to add", reply_markup=keyboard)
 
+        elif message == "/deleteSomeone":
+            buttons=[[InlineKeyboardButton(text=f'Patient', callback_data="/delPt"),
+                    InlineKeyboardButton(text=f'Doctor', callback_data="/delDc"),
+                    InlineKeyboardButton(text=f'Caretaker', callback_data="/delCt")]]
+
+            keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
+            self.bot.sendMessage(chat_ID, text="Select who do you want to delete", reply_markup=keyboard)
+
         elif message == "/updateField":
             buttons=[[InlineKeyboardButton(text=f'PatientAddress', callback_data="/upPtAdd"),
-                    InlineKeyboardButton(text=f'ActuatorTresh', callback_data="/upActTresh")]]
+                    InlineKeyboardButton(text=f'ActuatorTresh', callback_data="/upActTresh"),
+                    InlineKeyboardButton(text=f'SimSettings', callback_data="/upSimSets"),
+                    InlineKeyboardButton(text=f'Alarms', callback_data="/upAlarms")]]
 
             keyboard= InlineKeyboardMarkup(inline_keyboard=buttons)
             self.bot.sendMessage(chat_ID, text="Select what do you want to update", reply_markup=keyboard)
@@ -207,6 +204,21 @@ class SwitchBot:
 
         elif message == "/upActTresh":
             self.bot.sendMessage(chat_ID, text = explanations["updateActuator"])
+
+        elif message == "/upSimSets":
+            self.bot.sendMessage(chat_ID, text = explanations["updateSimSettings"])
+
+        elif message == "/upAlarms":
+            self.bot.sendMessage(chat_ID, text = explanations["updateAlarms"])
+
+        elif message == "/delPt":
+            self.bot.sendMessage(chat_ID, text = explanations["deletePatient"] )
+
+        elif message == "/delDc":
+            self.bot.sendMessage(chat_ID, text = explanations["deleteDoctor"] )
+
+        elif message == "/delCt":
+            self.bot.sendMessage(chat_ID, text = explanations["deleteCaretaker"])
 
         elif message == "/supported":
             self.bot.sendMessage(chat_ID, text = self.supportedFeatures())
@@ -288,25 +300,54 @@ class SwitchBot:
         elif name_field == '/deletePatient':
             if logged["Doctor"]:
                 pObj = Patient()
-                pObj.deleteField(catalog_address + "/telegram/deletePatient",val_field)
+                pObj.deleteField(catalog_address + "/telegram/deletePatient"+val_field)
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
         elif name_field == '/deleteDoctor':
             if logged["Doctor"]:
                 dObj = Doctor()
-                dObj.deleteField(catalog_address + "/telegram/deleteDoctor",val_field)
+                dObj.deleteField(catalog_address + "/telegram/deleteDoctor"+val_field)
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
         elif name_field == '/deleteCaretaker':
             if logged["Doctor"]:
                 cObj = Caretaker()
-                cObj.deleteField(catalog_address + "/telegram/deleteCaretaker",val_field)
+                cObj.deleteField(catalog_address + "/telegram/deleteCaretaker"+val_field)
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
-        
+
+        elif name_field == '/patientValues':
+
+            resp = self.print_all_values(val_field)
+            self.bot.sendMessage(chat_ID, text = resp)
+
+        elif name_field == '/removeSensor':
+            if logged["Doctor"]:
+                pObj = Patient()
+                pObj.deleteField(catalog_address + "/telegram/deleteSensor"+val_field)
+            else:
+                self.bot.sendMessage(chat_ID, text = "Access Denied")
+
+        elif name_field == '/addSensor':
+            if logged["Doctor"]:
+                pObj = Patient()
+                frame = pObj.addSensor(val_field)
+                pObj.updateFrame(catalog_address+"/telegram/addSensor", frame)
+            else:
+                self.bot.sendMessage(chat_ID, text = "Access Denied")
+
+        elif name_field == '/assignPatient':
+            dObj = Doctor()
+            frame = dObj.assignPatient(val_field)
+            dObj.updateFrame(catalog_address + "/telegram/assignPatient", frame)
+
+        elif name_field =='/assignPatientCaretaker':
+            cObj = Caretaker()
+            frame = cObj.assignPatient(val_field)
+            cObj.updateFrame(catalog_address + "/telegram/assignPatientCaretaker", frame)
 
         # elif name_field == '/folder/name':
         #     # message=val_field
@@ -324,7 +365,7 @@ class SwitchBot:
         #     flagFolder=999
 
         else:
-            self.bot.sendMessage(chat_ID, text="Command not supported")
+            self.bot.sendMessage(chat_ID, text="Command not supported, write /help for a list of commands")
         
         
 

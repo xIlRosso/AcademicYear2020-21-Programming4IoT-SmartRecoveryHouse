@@ -49,9 +49,9 @@ if __name__ == '__main__':
     i=0
 
     alarmValues = {
-        "Temp" : 0,
-        "HeartR" : 0,
-        "Weight" : 0,
+        "normal" : "",
+        "higher" : "",
+        "lower" : "",
     }    
 
     while i<1000:
@@ -107,37 +107,40 @@ if __name__ == '__main__':
 
                 if sensor["e"][0]["n"]=="temperature":
                     myPubl.publish(sim_t.sf[sensor["timesVisited"]])
+                    sensor["e"][0]["v"]=sim_t.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
                     if sim_t.sf[sensor["timesVisited"]] > sensor["alarmThresholds"]["temperatureHigh"]:
-                        alarmValues["Temp"] = 1
+                        alarmValues["higher"] = sensor["e"][0]["n"]
                     elif sim_t.sf[sensor["timesVisited"]] < sensor["alarmThresholds"]["temperatureLow"]:
-                        alarmValues["Temp"] = 2
+                        alarmValues["lower"] = sensor["e"][0]["n"]
                     else:
-                        alarmValues["Temp"] = 0
+                        alarmValues["normal"] = sensor["e"][0]["n"]
                     if sensor["timesVisited"]==len(sim_t.sf):
                         sensor["timesVisited"]=0
                     
                 elif sensor["e"][0]["n"]=="weight":
                     myPubl.publish(sim_w.sf[sensor["timesVisited"]])
+                    sensor["e"][0]["v"]=sim_w.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
                     if sim_w.sf[sensor["timesVisited"]] > sensor["alarmThresholds"]["weightHigh"]:
-                        alarmValues["Weight"] = 1
+                        alarmValues["higher"] = sensor["e"][0]["n"]
                     elif sim_w.sf[sensor["timesVisited"]] < sensor["alarmThresholds"]["weightLow"]:
-                        alarmValues["Weight"] = 2
+                        alarmValues["lower"] = sensor["e"][0]["n"]
                     else:
-                        alarmValues["Weight"] = 0                
+                        alarmValues["normal"] = sensor["e"][0]["n"]         
                     if sensor["timesVisited"]==len(sim_w.sf):
                         sensor["timesVisited"]=0
 
                 elif sensor["e"][0]["n"]=="heartrate":
                     myPubl.publish(sim_hr.sf[sensor["timesVisited"]])
-                    if sim_hr.sf[sensor["timesVisited"]] > sensor["alarmThresholds"]["heartrateHigh"]:
-                        alarmValues["HeartR"] = 1
-                    elif sim_hr.sf[sensor["timesVisited"]] < sensor["alarmThresholds"]["heartrateLow"]:
-                        alarmValues["HeartR"] = 2
-                    else:
-                        alarmValues["HeartR"] = 0 
+                    sensor["e"][0]["v"]=sim_hr.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
+                    if sim_hr.sf[sensor["timesVisited"]] > sensor["alarmThresholds"]["heartrateHigh"]:
+                        alarmValues["higher"] = sensor["e"][0]["n"]
+                    elif sim_hr.sf[sensor["timesVisited"]] < sensor["alarmThresholds"]["heartrateLow"]:
+                        alarmValues["lower"] = sensor["e"][0]["n"]
+                    else:
+                        alarmValues["normal"] = sensor["e"][0]["n"] 
                     if sensor["timesVisited"]==len(sim_hr.sf):
                         sensor["timesVisited"]=0
 
@@ -151,6 +154,8 @@ if __name__ == '__main__':
                 requests.put(catalog_address + "/sensors/updateTimeVisited/"+sensor["patientID"]+"/"+sensor["e"][0]["n"], json = times_dict)
 
                 requests.put(catalog_address + "/sensors/alarm_patient/"+sensor["patientID"]+"/"+sensor["e"][0]["n"], json = alarmValues)
+
+                requests.post(catalog_address + "/updateSens/body/" + sensor["patientID"], json=sensor)
 
                 myPubl.stop()    
                 print("Computing and publishing the next body sensor")

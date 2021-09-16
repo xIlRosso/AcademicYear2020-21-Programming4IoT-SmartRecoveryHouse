@@ -211,7 +211,8 @@
         "bodyDevices": [],
         "houseDevices": [],
         "actuatorsList": [],
-        "bodySensorsSimulation": {}
+        "bodySensorsSimulation": {},
+        "alarms_patient": ""
     },
     "baseSensor": {
         "topic": "",
@@ -292,6 +293,14 @@
         "lumen": "lm",
         "humidity": "%",
         "time": "s"
+    },
+    "correspondentUnits":{
+        "temperature": "C",
+        "lumen": "lm",
+        "humidity": "%",
+        "weight": "kg",
+        "heartrate": "bpm",
+        "time" : "s"
     },
     "meanAndVarSensorsHouse": {
         "temperature": {

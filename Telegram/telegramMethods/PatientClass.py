@@ -78,6 +78,21 @@ class Patient:
 
         return frame
 
+    def addSensor(self, datum) -> dict:
+        datum_list = datum.split('/')
+        datum_list.pop(0)
+        self.uniqueID = datum_list.pop(0)
+        zoneName = datum_list.pop(0)
+        sensName = datum_list.pop(0)
+
+        frame = {
+            "uniqueID" : self.uniqueID,
+            "zone" : zoneName,
+            "sensName" : sensName
+        }
+
+        return frame
+
     def addAddress(self, datum) -> dict:
         datum_list = datum.split('/')
         datum_list.pop(0)
@@ -162,11 +177,8 @@ class Patient:
     def updateFrame(self, ipAddress, frame) -> None:
         requests.put(ipAddress, json=frame)
 
-    def deleteField(self, ipAddress, datum) -> None:
-        datum_list = datum.split('/')
-        datum_list.pop(0)
-
-        requests.delete(ipAddress+'/'+datum_list.pop(0))
+    def deleteField(self, ipAddress) -> None:
+        requests.delete(ipAddress)
 
     #maybe add put requests for updating fields
     

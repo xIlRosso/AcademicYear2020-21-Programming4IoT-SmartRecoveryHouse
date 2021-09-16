@@ -37,6 +37,20 @@ class Doctor:
 
         return frame
 
+    def assignPatient(self, datum) -> dict:
+        datum_list=datum.split('/')
+        datum_list.pop(0)
+
+        docID = datum_list.pop(0)
+        patID = datum_list.pop(0)
+        
+        frame = {
+            "docID" : docID,
+            "patID" : patID
+        }
+
+        return frame
+
     def registerAccount(self, datum) -> dict:
         datum_list = datum.split('/')
         datum_list.pop(0)
@@ -54,8 +68,5 @@ class Doctor:
     def updateFrame(self, ipAddress, frame) -> None:
         requests.put(ipAddress, json=frame)
 
-    def deleteField(self, ipAddress, datum) -> None:
-        datum_list = datum.split('/')
-        datum_list.pop(0)
-
-        requests.delete(ipAddress+'/'+datum_list.pop(0))
+    def deleteField(self, ipAddress) -> None:
+        requests.delete(ipAddress)

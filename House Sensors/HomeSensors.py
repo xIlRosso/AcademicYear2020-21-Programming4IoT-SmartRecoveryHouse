@@ -83,6 +83,7 @@ if __name__ == "__main__":
             for sensor in house:
                 sensor["e"][0]["v"]= generate_value(conf[sensor["e"][0]["n"]]["mean"], conf[sensor["e"][0]["n"]]["var"])
                 sensor["e"][0]["t"] = time.asctime()
+                requests.post(catalog_address + "/updateSens/house/"+sensor["patientID"], json = sensor)
                 msgToPub.append(sensor)
 
             myClient.publish(sensor["topic"], payload = json.dumps(msgToPub))
