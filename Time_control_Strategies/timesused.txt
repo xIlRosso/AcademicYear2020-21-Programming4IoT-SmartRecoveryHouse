@@ -1,6 +1,0 @@
-20:00:00 - 6:00:00
-
-data datastructure
-cell 0 light on/off
-cell 1 heating on/off
-ecc..
