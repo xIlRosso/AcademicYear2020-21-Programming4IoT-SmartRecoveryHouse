@@ -13,7 +13,7 @@ import paho.mqtt.client as PahoMQTT
 import os.path
 from time_shift.time_shift_classes import TimeShift
 from actuators_control.actuators_classes import Actuators
-from mqtt_methods.mqtt_methods import Publishers, Subscribers    
+from mqtt_methods.mqtt_methods import Subscribers    
         
 
 def definePaho(clientID):
@@ -80,7 +80,7 @@ if __name__=='__main__':
         #get actuators and topic info values
         f = requests.get(catalog_address+"/controls/house_list")
         houses = f.json()
-        print(houses)
+        
         houses = houses["houses"]
 
         for house in houses:

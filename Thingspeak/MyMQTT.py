@@ -35,7 +35,7 @@ class MyMQTT:
         #If needed, make some computation on the data before subscribing
         print("Subscribing to %s" % (topic))
         #Subscribe to a topic
-        self._paho_mqtt.subscribe(topic, 2)
+        self._paho_mqtt.subscribe(topic, qos = 2)
 
         #Just to remeber that it works also as a subscriber
         self._isSubscriber = True

@@ -24,16 +24,17 @@ class mySubscriber():
     def notify(self, topic, payload):
         payload = json.loads(payload)
         if payload != []:
-            for sensor in payload:
-                new_status = sensor["e"][0]["v"]
-                name_sensor = sensor["e"][0]["n"]
-                self.status = new_status
-                pubID = sensor["bn"]
-                timestamp = sensor["e"][0]["t"]
-                print(f"The measured value is {new_status} at {timestamp} by {pubID}")
+            # for sensor in payload:
+            sensor = payload
+            new_status = sensor["e"][0]["v"]
+            name_sensor = sensor["e"][0]["n"]
+            self.status = new_status
+            pubID = sensor["bn"]
+            timestamp = sensor["e"][0]["t"]
+            print(f"The measured value is {new_status} at {timestamp} by {pubID}")
 
-        # push data to thingspeak 
-                self.thingspeak_post(new_status, name_sensor)
+    # push data to thingspeak 
+            self.thingspeak_post(new_status, name_sensor)
                 # time.sleep(20)
 
     ############## pushing to thingspeak ####################""
@@ -132,33 +133,6 @@ if __name__ == "__main__":
         mySub = mySubscriber("AlexSubs920318_client1", topic_sens_t, broker, port,  conf["url"], conf["key"], conf["field"])
 
         mySub.start()
-        time.sleep(25)
+        time.sleep(60)
         mySub.stop()
         oldID = unID
-       
-
-
-    
-
-
-
-    # heart rate
-    # topic_hr = conf["Topics_List"][1]
-    # mySub_hr = mySubscriber("AlexSubs920318_client2", topic_hr, broker, port, 1)
-
-
-    # # weight
-    # topic_weight = conf["Topics_List"][2]
-    # mySub_weight = mySubscriber("AlexSubs920318_client3", topic_weight, broker, port, 2)
-
-    # mySub_temp.start()
-    # mySub_hr.start()
-    # mySub_weight.start()
-    
-    # while (1):
-    #     time.sleep(10)
-        
-    # mySub_temp.stop()
-    # mySub_hr.stop()
-    # mySub_weight.stop()
-    

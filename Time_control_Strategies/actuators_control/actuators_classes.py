@@ -22,7 +22,7 @@ class Subscribers:
     def start(self):
         self._paho_client.connect(self.messageBroker)
         self._paho_client.loop_start()
-        self._paho_client.subscribe(self.topic, 2)
+        self._paho_client.subscribe(self.topic, qos = 2)
         
     def stop(self):
         self._paho_client.unsubscribe(self.topic)
@@ -56,9 +56,11 @@ class Actuators:
         treshHigh = self.tresholds[1]
         state = ""
 
-        if val < treshHigh:
+        if val > treshHigh:
             state = "off"
-        elif val >= treshLow:
+        elif val >= treshLow and val <= treshHigh:
+            state = "on"
+        elif val < treshLow:
             state = "on"
 
         return state

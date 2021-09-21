@@ -86,7 +86,7 @@ if __name__ == "__main__":
                 requests.post(catalog_address + "/updateSens/house/"+sensor["patientID"], json = sensor)
                 msgToPub.append(sensor)
 
-            myClient.publish(sensor["topic"], payload = json.dumps(msgToPub))
+            myClient.publish(sensor["topic"], payload = json.dumps(msgToPub), qos = 0)
             stopConnection(myClient, sensor["topic"])
             print(json.dumps(msgToPub))
             print("Computing and publishing the next house")

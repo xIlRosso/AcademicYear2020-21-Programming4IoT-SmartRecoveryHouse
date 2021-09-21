@@ -239,7 +239,7 @@ class POST_manager():
     def run(self, data):
         if self.path[0]=='trained_modelsupdate':
             _set_path='data_comparison/trained_models.json'
-            json.dump(data, open(_set_path,'w'))
+            json.dump(data, open(_set_path,'w'), indent = 4)
                 
         elif self.path[0] == 'regression_resultupdate':
             _set_path="settings.json"
@@ -252,7 +252,11 @@ class POST_manager():
             smt["Regr_Values"]["Weight"] = data["Weight"]
             smt["Regr_Values"]["HeartR"] = data["HeartR"]
             
-            json.dump(smt, open(_set_path,'w'), indent=4)
+            
+            f = open(_set_path, 'w')
+            json.dump(smt, f, indent = 4)
+            f.close()
+            
             
             
         elif self.path[0] == 'updateSens':
@@ -274,7 +278,10 @@ class POST_manager():
                                     if sensor["e"][0]["n"] == data["e"][0]["n"]:
                                         sensor["e"][0]["v"]=data["e"][0]["v"]
                                         
-                    json.dump(all_data, open(_set_path,"w"), indent=4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
+            
                     
             elif self.path[1] == 'house':
                 
@@ -290,7 +297,9 @@ class POST_manager():
                                     if sensor["e"][0]["n"] == data["e"][0]["n"]:
                                         sensor["e"][0]["v"]=data["e"][0]["v"]
                                         
-                    json.dump(all_data, open(_set_path,"w"), indent=4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                 
             elif self.path[1] == 'actuator':
                 
@@ -306,7 +315,9 @@ class POST_manager():
                                     if actuator["name"] == data["name"]:
                                         actuator["state"] = data["state"]
                                         
-                    json.dump(all_data, open(_set_path,"w"), indent=4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
         
             
         elif self.path[0]=="telegram":
@@ -383,7 +394,10 @@ class POST_manager():
                         newActuator = None
                         
                     all_data["patientsList"].append(newPatient)
-                json.dump(all_data, open(_set_path,"w"), indent=4)
+                    
+                f = open(_set_path, 'w')
+                json.dump(all_data, f, indent = 4)
+                f.close()
                 
             elif self.path[1]=="addDoctor":
                 
@@ -402,7 +416,9 @@ class POST_manager():
                     newDoctor["uniqueID"] = data["uniqueID"]
                     
                     all_data["doctorsList"].append(newDoctor)
-                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                f = open(_set_path, 'w')
+                json.dump(all_data, f, indent = 4)
+                f.close()
                 
             elif self.path[1]=="addCaretaker":
                 
@@ -423,7 +439,9 @@ class POST_manager():
                     
                     all_data["caretakersList"].append(newCaretaker)
                     
-                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                f = open(_set_path, 'w')
+                json.dump(all_data, f, indent = 4)
+                f.close()
                 
                 
                     
@@ -444,7 +462,9 @@ class PUT_manager():
                         if patient["uniqueID"] == data["uniqueID"]:
                             patient["address"] = data["address"]
                             
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                 
             elif self.path[1] == "updateActuator":
                 if all_data["patientsList"] != []:
@@ -456,7 +476,9 @@ class PUT_manager():
                                     actuator["tresholds"][0]=data["actLow"]
                                     actuator["tresholds"][1]=data["actHigh"]
                                     
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
 
             elif self.path[1] == "updateAlarms":
                 if all_data["patientsList"] != []:
@@ -468,7 +490,9 @@ class PUT_manager():
                                     alarm["alarmThresholds"][alarm["e"][0]["n"]+"Low"]=data["alarmLow"]
                                     alarm["alarmThresholds"][alarm["e"][0]["n"]+"High"]=data["alarmHigh"]
                                     
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
 
             elif self.path[1] == "updateSimulation":
                 if all_data["patientsList"] != []:
@@ -481,7 +505,9 @@ class PUT_manager():
                                     simulation["statusSim"] = data["statusSim"]
 
                                     
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)             
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()     
 
             elif self.path[1] == "registerPatient":
                 if all_data["patientsList"] != []:
@@ -490,7 +516,9 @@ class PUT_manager():
                             patient["pin"] = data["pin"]
                             
                             
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1] == "registerDoctor":
                 if all_data["doctorsList"] != []:
@@ -498,7 +526,9 @@ class PUT_manager():
                         if doctor["uniqueID"] == data["userName"]:
                             doctor["pin"] = data["pin"]
                             
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1] == "registerCaretaker":
                 if all_data["caretakersList"] != []:
@@ -506,7 +536,9 @@ class PUT_manager():
                         if caretaker["uniqueID"] == data["userName"]:
                             caretaker["pin"] = data["pin"]
                             
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
                     
             elif self.path[1] == "addSensor":
@@ -530,7 +562,9 @@ class PUT_manager():
                             patient[zone+"Devices"].append(newSensor)
                             
                             
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1] == "assignPatient":
                 docID = data["docID"]
@@ -542,7 +576,9 @@ class PUT_manager():
                             doctor["patientsAssigned"].append(patID)
                             
                             
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1] == "assignPatientCaretaker":
                 careID = data["careID"]
@@ -554,14 +590,18 @@ class PUT_manager():
                             caretaker["patientAssigned"] = patID
                             
                             
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
             
             elif self.path[1] == "updateHighlighted":
                 upID = data["uniqueID"]
                 
                 all_data["highlightedPatient"] = upID
                 
-                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                f = open(_set_path, 'w')
+                json.dump(all_data, f, indent = 4)
+                f.close()
             
         elif self.path[0] == "sensors":
             if self.path[1] == "updateTimeVisited":
@@ -577,7 +617,9 @@ class PUT_manager():
                                     if device["e"][0]["n"] == sens_name:
                                         device["timesVisited"] = data["timesVisited"]
                                     
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1] == "alarm_patient":
                 
@@ -591,7 +633,9 @@ class PUT_manager():
                                 if data[key]!="":
                                     patient["alarms_patient"] = key
                                     
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
             
                 
 class DELETE_manager():
@@ -634,7 +678,9 @@ class DELETE_manager():
                             
                         i+=1
                         
-                json.dump(all_data, open(_set_path,"w"), indent = 4)
+                f = open(_set_path, 'w')
+                json.dump(all_data, f, indent = 4)
+                f.close()
                 
             
             elif self.path[1]=="deleteDoctor":
@@ -647,7 +693,9 @@ class DELETE_manager():
                             
                         i+=1
                         
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
                     
             elif self.path[1]=="deleteCaretaker":
                 uniqueID = self.path[2]
@@ -659,7 +707,9 @@ class DELETE_manager():
                             
                         i+=1
                         
-                    json.dump(all_data, open(_set_path,"w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()
         
             elif self.path[1] == "deleteSensor":
                 uniqueID=self.path[2]
@@ -674,4 +724,6 @@ class DELETE_manager():
                                     if sensor["e"][0]["n"]==sens_name:
                                         patient[zone+"Devices"].pop(patient[zone+"Devices"].index(sensor))
                                         
-                    json.dump(all_data, open(_set_path, "w"), indent = 4)
+                    f = open(_set_path, 'w')
+                    json.dump(all_data, f, indent = 4)
+                    f.close()

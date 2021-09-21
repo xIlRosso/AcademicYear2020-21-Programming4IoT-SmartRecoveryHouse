@@ -106,6 +106,8 @@ if __name__ == '__main__':
                
 
                 if sensor["e"][0]["n"]=="temperature":
+                    if sensor["timesVisited"]==len(sim_t.sf)-1:
+                        sensor["timesVisited"]=0
                     myPubl.publish(sim_t.sf[sensor["timesVisited"]])
                     sensor["e"][0]["v"]=sim_t.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
@@ -115,10 +117,11 @@ if __name__ == '__main__':
                         alarmValues["lower"] = sensor["e"][0]["n"]
                     else:
                         alarmValues["normal"] = sensor["e"][0]["n"]
-                    if sensor["timesVisited"]==len(sim_t.sf):
-                        sensor["timesVisited"]=0
+                    
                     
                 elif sensor["e"][0]["n"]=="weight":
+                    if sensor["timesVisited"]==len(sim_w.sf)-1:
+                        sensor["timesVisited"]=0
                     myPubl.publish(sim_w.sf[sensor["timesVisited"]])
                     sensor["e"][0]["v"]=sim_w.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
@@ -128,10 +131,11 @@ if __name__ == '__main__':
                         alarmValues["lower"] = sensor["e"][0]["n"]
                     else:
                         alarmValues["normal"] = sensor["e"][0]["n"]         
-                    if sensor["timesVisited"]==len(sim_w.sf):
-                        sensor["timesVisited"]=0
+                    
 
                 elif sensor["e"][0]["n"]=="heartrate":
+                    if sensor["timesVisited"]==len(sim_hr.sf)-1:
+                        sensor["timesVisited"]=0
                     myPubl.publish(sim_hr.sf[sensor["timesVisited"]])
                     sensor["e"][0]["v"]=sim_hr.sf[sensor["timesVisited"]]
                     sensor["timesVisited"]+=1
@@ -141,8 +145,7 @@ if __name__ == '__main__':
                         alarmValues["lower"] = sensor["e"][0]["n"]
                     else:
                         alarmValues["normal"] = sensor["e"][0]["n"] 
-                    if sensor["timesVisited"]==len(sim_hr.sf):
-                        sensor["timesVisited"]=0
+                    
 
                 time.sleep(20)
 

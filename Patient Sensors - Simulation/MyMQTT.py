@@ -29,7 +29,7 @@ class MyMQTT:
         #If needed, make some computation on the data before publishing
         print("Publishing '%s' with topic '%s'" % (msg, topic))
         #publish to a certain topic with QoS 2
-        self._paho_mqtt.publish(topic, json.dumps(msg), 2)
+        self._paho_mqtt.publish(topic, payload = json.dumps(msg), qos = 0)
 
     def mySubscribe(self, topic):
         #If needed, make some computation on the data before subscribing
