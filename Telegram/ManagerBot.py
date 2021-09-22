@@ -237,18 +237,18 @@ class SwitchBot:
         elif name_field == '/addPatient':
             pObj = Patient()
             pObj.buildAttributes(val_field)
-            self.bot.sendMessage(chat_ID, text = json.dumps(pObj.bodySensors))
-            self.bot.sendMessage(chat_ID, text = json.dumps(pObj.threshBSensors))
             frame = pObj.createFrame()
             pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
             self.bot.sendMessage(chat_ID, text = json.dumps(frame))
             frame = 0
+            del pObj
 
         elif name_field == '/addPatientAddress':
             pObj = Patient()
             frame = pObj.addAddress(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateAddress", frame) #put request
             frame = 0
+            del pObj
 
         elif name_field == '/addDoctor':
             dObj = Doctor()
@@ -256,6 +256,7 @@ class SwitchBot:
             frame = dObj.createFrame()
             dObj.sendFrame(catalog_address + "/telegram/addDoctor", frame) #post request
             frame = 0
+            del dObj
 
         elif name_field == '/addCaretaker':
             cObj = Caretaker()
@@ -263,47 +264,55 @@ class SwitchBot:
             frame = cObj.createFrame()
             cObj.sendFrame(catalog_address + "/telegram/addCaretaker", frame) #post request
             frame = 0
+            del cObj
 
         elif name_field == '/updateSimulation':
             pObj = Patient()
             frame = pObj.updateSimsettings(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateSimulation", frame) #put request
             frame = 0
+            del pObj
 
         elif name_field == '/updateAlarms':
             pObj = Patient()
             frame = pObj.updateAlarms(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateAlarms", frame) #put request
             frame = 0
+            del pObj
 
         elif name_field == '/updateActuator':
             pObj = Patient()
             frame = pObj.updateActuatorVal(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateActuator", frame) #put request
             frame = 0
+            del pObj
 
         elif name_field == '/patientPinRegistration':
             pObj = Patient()
             frame = pObj.registerAccount(val_field)
             pObj.updateFrame(catalog_address + "/telegram/registerPatient", frame)
             frame = 0
+            del pObj
 
         elif name_field == '/doctorPinRegistration':
             dObj = Doctor()
             frame = dObj.registerAccount(val_field)
             dObj.updateFrame(catalog_address + "/telegram/registerDoctor", frame)
             frame = 0
+            del dObj
 
         elif name_field == '/caretakerPinRegistration':
             cObj = Caretaker()
             frame = cObj.registerAccount(val_field)
             cObj.updateFrame(catalog_address + "/telegram/registerCaretaker", frame)
             frame = 0
+            del cObj
 
         elif name_field == '/deletePatient':
             if logged["Doctor"]:
                 pObj = Patient()
                 pObj.deleteField(catalog_address + "/telegram/deletePatient"+val_field)
+                del pObj
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
@@ -311,6 +320,7 @@ class SwitchBot:
             if logged["Doctor"]:
                 dObj = Doctor()
                 dObj.deleteField(catalog_address + "/telegram/deleteDoctor"+val_field)
+                del dObj
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
@@ -318,6 +328,7 @@ class SwitchBot:
             if logged["Doctor"]:
                 cObj = Caretaker()
                 cObj.deleteField(catalog_address + "/telegram/deleteCaretaker"+val_field)
+                del cObj
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
@@ -331,6 +342,7 @@ class SwitchBot:
             if logged["Doctor"]:
                 pObj = Patient()
                 pObj.deleteField(catalog_address + "/telegram/deleteSensor"+val_field)
+                del pObj
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
@@ -339,6 +351,7 @@ class SwitchBot:
                 pObj = Patient()
                 frame = pObj.addSensor(val_field)
                 pObj.updateFrame(catalog_address+"/telegram/addSensor", frame)
+                del pObj
             else:
                 self.bot.sendMessage(chat_ID, text = "Access Denied")
 
@@ -346,16 +359,19 @@ class SwitchBot:
             dObj = Doctor()
             frame = dObj.assignPatient(val_field)
             dObj.updateFrame(catalog_address + "/telegram/assignPatient", frame)
+            del dObj
 
         elif name_field =='/assignPatientCaretaker':
             cObj = Caretaker()
             frame = cObj.assignPatient(val_field)
             cObj.updateFrame(catalog_address + "/telegram/assignPatientCaretaker", frame)
+            del cObj
 
         elif name_field =='/updateHighlighted':
             pObj = Patient()
             frame = pObj.changeHighlighted(val_field)
             pObj.updateFrame(catalog_address + "/telegram/updateHighlighted", frame)
+            del pObj
 
 
         else:
