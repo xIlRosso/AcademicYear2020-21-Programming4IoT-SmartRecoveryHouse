@@ -237,6 +237,8 @@ class SwitchBot:
         elif name_field == '/addPatient':
             pObj = Patient()
             pObj.buildAttributes(val_field)
+            self.bot.sendMessage(chat_ID, text = json.dumps(pObj.bodySensors))
+            self.bot.sendMessage(chat_ID, text = json.dumps(pObj.threshBSensors))
             frame = pObj.createFrame()
             pObj.sendFrame(catalog_address + "/telegram/addPatient", frame) #post request
             self.bot.sendMessage(chat_ID, text = json.dumps(frame))

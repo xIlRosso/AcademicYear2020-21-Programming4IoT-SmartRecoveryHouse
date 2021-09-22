@@ -3,7 +3,7 @@
     "broker": "broker.hivemq.com",
     "port": 1883,
     "baseTopic": "programming_for_iot/aa2021/SmartRecoveryHouse",
-    "highlightedPatient": "thatdomaincom",
+    "highlightedPatient": "obama@gmail.com",
     "patientsList": [
         {
             "name": "George_Washington",
@@ -28,14 +28,14 @@
                         "temperatureLow": 34.7,
                         "temperatureHigh": 41.0
                     },
-                    "timesVisited": 16,
+                    "timesVisited": 22,
                     "bn": "thatdomaincom/body/temperature",
                     "e": [
                         {
                             "n": "temperature",
                             "u": "C",
                             "t": "",
-                            "v": 37.245801335484295
+                            "v": 36.41128702093426
                         }
                     ]
                 },
@@ -50,14 +50,14 @@
                         "heartrateLow": 45.0,
                         "heartrateHigh": 100.0
                     },
-                    "timesVisited": 14,
+                    "timesVisited": 20,
                     "bn": "thatdomaincom/body/heartrate",
                     "e": [
                         {
                             "n": "heartrate",
                             "u": "bpm",
                             "t": "",
-                            "v": 65.0
+                            "v": 60.0
                         }
                     ]
                 },
@@ -72,14 +72,14 @@
                         "weightLow": 80.0,
                         "weightHigh": 90.0
                     },
-                    "timesVisited": 10,
+                    "timesVisited": 14,
                     "bn": "thatdomaincom/body/weight",
                     "e": [
                         {
                             "n": "weight",
                             "u": "kg",
                             "t": "",
-                            "v": 83.59801915816696
+                            "v": 84.21697521521946
                         }
                     ]
                 }
@@ -97,7 +97,7 @@
                             "n": "temperature",
                             "u": "C",
                             "t": "",
-                            "v": 20.134281665460417
+                            "v": 20.818591693852174
                         }
                     ]
                 },
@@ -113,7 +113,7 @@
                             "n": "humidity",
                             "u": "%",
                             "t": "",
-                            "v": 39.156111065745236
+                            "v": 42.38937436325255
                         }
                     ]
                 },
@@ -129,7 +129,7 @@
                             "n": "lumen",
                             "u": "lm",
                             "t": "",
-                            "v": 342.8540174548135
+                            "v": 237.56810237332013
                         }
                     ]
                 }
@@ -197,19 +197,194 @@
                     "statusSim": "n"
                 }
             ],
-            "alarms_patient": "normal"
+            "alarms_patient": "higher"
+        },
+        {
+            "name": "Obama",
+            "age": 40,
+            "weight": 70,
+            "uniqueID": "obama@gmail.com",
+            "pin": "",
+            "disease": "meningitis",
+            "bodySensors": [],
+            "houseSensors": [],
+            "controlledActuators": [],
+            "address": "",
+            "bodyDevices": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/body",
+                    "patientID": "obama@gmail.com",
+                    "simThresholds": {
+                        "temperatureLow": 34.0,
+                        "temperatureHigh": 41.0
+                    },
+                    "alarmThresholds": {
+                        "temperatureLow": 35.0,
+                        "temperatureHigh": 40.0
+                    },
+                    "timesVisited": 11,
+                    "bn": "obama@gmail.com/body/temperature",
+                    "e": [
+                        {
+                            "n": "temperature",
+                            "u": "C",
+                            "t": "",
+                            "v": 39.018374022197534
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/body",
+                    "patientID": "obama@gmail.com",
+                    "simThresholds": {
+                        "heartrateLow": 60.0,
+                        "heartrateHigh": 75.0
+                    },
+                    "alarmThresholds": {
+                        "heartrateLow": 45.0,
+                        "heartrateHigh": 100.0
+                    },
+                    "timesVisited": 10,
+                    "bn": "obama@gmail.com/body/heartrate",
+                    "e": [
+                        {
+                            "n": "heartrate",
+                            "u": "bpm",
+                            "t": "",
+                            "v": 75.0
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/body",
+                    "patientID": "obama@gmail.com",
+                    "simThresholds": {
+                        "weightLow": 69.0,
+                        "weightHigh": 71.0
+                    },
+                    "alarmThresholds": {
+                        "weightLow": 68.0,
+                        "weightHigh": 72.0
+                    },
+                    "timesVisited": 10,
+                    "bn": "obama@gmail.com/body/weight",
+                    "e": [
+                        {
+                            "n": "weight",
+                            "u": "kg",
+                            "t": "",
+                            "v": 69.68105127603553
+                        }
+                    ]
+                }
+            ],
+            "houseDevices": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/house",
+                    "patientID": "obama@gmail.com",
+                    "simThresholds": {},
+                    "alarmThresholds": {},
+                    "timesVisited": 0,
+                    "bn": "obama@gmail.com/house/temperature",
+                    "e": [
+                        {
+                            "n": "temperature",
+                            "u": "C",
+                            "t": "",
+                            "v": 19.96567977736696
+                        }
+                    ]
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/house",
+                    "patientID": "obama@gmail.com",
+                    "simThresholds": {},
+                    "alarmThresholds": {},
+                    "timesVisited": 0,
+                    "bn": "obama@gmail.com/house/humidity",
+                    "e": [
+                        {
+                            "n": "humidity",
+                            "u": "%",
+                            "t": "",
+                            "v": 45.50352192236078
+                        }
+                    ]
+                }
+            ],
+            "actuatorsList": [
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/actuator",
+                    "patientID": "obama@gmail.com",
+                    "unit": "s",
+                    "name": "time",
+                    "tresholds": [
+                        "06:00:00",
+                        "20:00:00"
+                    ],
+                    "state": "on"
+                },
+                {
+                    "topic": "programming_for_iot/aa2021/SmartRecoveryHouse/obama@gmail.com/actuator",
+                    "patientID": "obama@gmail.com",
+                    "unit": "C",
+                    "name": "temperature",
+                    "tresholds": [
+                        19,
+                        21
+                    ],
+                    "state": "on"
+                }
+            ],
+            "bodySensorsSimulation": [
+                {
+                    "sensorName": "temperature",
+                    "typeSim": "r",
+                    "statusSim": "y"
+                },
+                {
+                    "sensorName": "weight",
+                    "typeSim": "r",
+                    "statusSim": "n"
+                },
+                {
+                    "sensorName": "heartrate",
+                    "typeSim": "r",
+                    "statusSim": "n"
+                }
+            ],
+            "alarms_patient": "higher"
         }
     ],
     "doctorsList": [
         {
             "name": "Alex",
             "age": 29,
-            "patientsAssigned": [],
+            "patientsAssigned": [
+                "obama@gmail.com"
+            ],
             "pin": "12345678",
             "uniqueID": "unique1@domain.com"
+        },
+        {
+            "name": "Che_Guevara",
+            "age": 49,
+            "patientsAssigned": [
+                "thatdomaincom"
+            ],
+            "pin": "qwerty",
+            "uniqueID": "che@guevara.com"
         }
     ],
-    "caretakersList": [],
+    "caretakersList": [
+        {
+            "name": "Giovanni",
+            "age": 36,
+            "patientAssigned": "thatdomaincom",
+            "uniqueID": "example@gmail.com",
+            "pin": "10987654"
+        }
+    ],
     "baseCaretaker": {
         "name": "",
         "age": "",
@@ -367,4 +542,4 @@
         "HeartR": 136.3677245527605,
         "Weight": 62.66378106377107
     }
-}}
+}
